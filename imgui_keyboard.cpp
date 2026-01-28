@@ -412,14 +412,21 @@ static void RenderKey(ImDrawList *draw_list, const ImVec2 &key_min, const ImVec2
 					   ImDrawFlags_None, style.KeyFaceBorderSize);
 	draw_list->AddRectFilled(face_min, face_max, GetColorU32(ImGuiKeyboardCol_KeyFace), key_face_rounding);
 
-	// Select label based on shift state (unless NoShiftLabels flag is set)
-	const bool shiftPressed = !(flags & ImGuiKeyboardFlags_NoShiftLabels) &&
-							   (ImGui::IsKeyDown(ImGuiKey_LeftShift) || ImGui::IsKeyDown(ImGuiKey_RightShift));
-	const char *displayLabel = (shiftPressed && shiftLabel) ? shiftLabel : label;
-
-	// Label
+	// Label rendering
 	ImVec2 label_min = ImVec2(key_min.x + key_label_pos.x, key_min.y + key_label_pos.y);
-	draw_list->AddText(label_min, GetColorU32(ImGuiKeyboardCol_KeyLabel), displayLabel);
+	if ((flags & ImGuiKeyboardFlags_ShowBothLabels) && shiftLabel) {
+		// Show both labels: shift label on top, normal label below
+		const float lineHeight = ImGui::GetFontSize();
+		draw_list->AddText(label_min, GetColorU32(ImGuiKeyboardCol_KeyLabel), shiftLabel);
+		ImVec2 lower_label_min = ImVec2(label_min.x, label_min.y + lineHeight);
+		draw_list->AddText(lower_label_min, GetColorU32(ImGuiKeyboardCol_KeyLabel), label);
+	} else {
+		// Select label based on shift state (unless NoShiftLabels flag is set)
+		const bool shiftPressed = !(flags & ImGuiKeyboardFlags_NoShiftLabels) &&
+								   (ImGui::IsKeyDown(ImGuiKey_LeftShift) || ImGui::IsKeyDown(ImGuiKey_RightShift));
+		const char *displayLabel = (shiftPressed && shiftLabel) ? shiftLabel : label;
+		draw_list->AddText(label_min, GetColorU32(ImGuiKeyboardCol_KeyLabel), displayLabel);
+	}
 
 	// Highlight if pressed (red) or explicitly highlighted (green)
 	const bool isPressed = (flags & ImGuiKeyboardFlags_ShowPressed) && ImGui::IsKeyDown(key);
@@ -619,6 +626,8 @@ void Keyboard(ImGuiKeyboardLayout layout, ImGuiKeyboardFlags flags) {
 #ifndef IMGUI_DISABLE_DEMO_WINDOWS
 void KeyboardDemo() {
 	static bool showPressed = true;
+	static bool noShiftLabels = false;
+	static bool showBothLabels = false;
 	static int currentLayout = ImGuiKeyboardLayout_Qwerty;
 	static bool highlightWASD = false;
 	static bool highlightArrows = false;
@@ -648,6 +657,16 @@ void KeyboardDemo() {
 	// Flags
 	ImGui::Text("Options:");
 	ImGui::Checkbox("Show Pressed Keys (Red)", &showPressed);
+	if (ImGui::Checkbox("Show Both Labels (Shift + Normal)", &showBothLabels)) {
+		if (showBothLabels) {
+			noShiftLabels = false; // Disable conflicting option
+		}
+	}
+	if (ImGui::Checkbox("Disable Shift Labels", &noShiftLabels)) {
+		if (noShiftLabels) {
+			showBothLabels = false; // Disable conflicting option
+		}
+	}
 
 	ImGui::Separator();
 	ImGui::Text("Highlight Groups (Green):");
@@ -783,6 +802,12 @@ void KeyboardDemo() {
 	ImGuiKeyboardFlags flags = ImGuiKeyboardFlags_None;
 	if (showPressed) {
 		flags |= ImGuiKeyboardFlags_ShowPressed;
+	}
+	if (noShiftLabels) {
+		flags |= ImGuiKeyboardFlags_NoShiftLabels;
+	}
+	if (showBothLabels) {
+		flags |= ImGuiKeyboardFlags_ShowBothLabels;
 	}
 	Keyboard((ImGuiKeyboardLayout)currentLayout, flags);
 }

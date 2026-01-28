@@ -46,6 +46,7 @@ enum ImGuiKeyboardFlags_ {
 	ImGuiKeyboardFlags_None = 0,
 	ImGuiKeyboardFlags_ShowPressed = 1 << 0, // Highlight keys that are currently pressed
 	ImGuiKeyboardFlags_NoShiftLabels = 1 << 1, // Don't show shift labels when Shift is pressed
+	ImGuiKeyboardFlags_ShowBothLabels = 1 << 2, // Always show both normal and shift labels (shift label below)
 };
 typedef int ImGuiKeyboardFlags;
 
