@@ -52,6 +52,7 @@ typedef int ImGuiKeyboardFlags;
 
 // Style colors for the keyboard widget
 enum ImGuiKeyboardCol_ {
+	ImGuiKeyboardCol_BoardBackground,	// Board background color
 	ImGuiKeyboardCol_KeyBackground,		// Key background color
 	ImGuiKeyboardCol_KeyBorder,			// Key border color
 	ImGuiKeyboardCol_KeyFaceBorder,		// Key face border color
@@ -76,6 +77,7 @@ struct ImGuiKeyboardStyle {
 	ImVec2 KeyFaceOffset;	// Offset of key face from key edge (default: 4.0f, 3.0f)
 	ImVec2 KeyLabelOffset;	// Offset of label from key edge (default: 6.0f, 4.0f)
 	float BoardPadding;		// Padding around keyboard (default: 5.0f)
+	float BoardRounding;	// Board corner rounding (default: 5.0f)
 
 	// Colors
 	ImVec4 Colors[ImGuiKeyboardCol_COUNT];

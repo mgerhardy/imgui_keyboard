@@ -13,15 +13,17 @@ ImGuiKeyboardStyle::ImGuiKeyboardStyle() {
 	KeyFaceOffset = ImVec2(4.0f, 3.0f);
 	KeyLabelOffset = ImVec2(6.0f, 4.0f);
 	BoardPadding = 5.0f;
+	BoardRounding = 5.0f;
 
-	Colors[ImGuiKeyboardCol_KeyBackground] = ImVec4(0.8f, 0.8f, 0.8f, 1.0f);			  // Light gray
-	Colors[ImGuiKeyboardCol_KeyBorder] = ImVec4(0.094f, 0.094f, 0.094f, 1.0f);		  // Dark gray
-	Colors[ImGuiKeyboardCol_KeyFaceBorder] = ImVec4(0.757f, 0.757f, 0.757f, 1.0f);	  // Medium gray
-	Colors[ImGuiKeyboardCol_KeyFace] = ImVec4(0.988f, 0.988f, 0.988f, 1.0f);		  // Near white
-	Colors[ImGuiKeyboardCol_KeyLabel] = ImVec4(0.25f, 0.25f, 0.25f, 1.0f);			  // Dark text
-	Colors[ImGuiKeyboardCol_KeyPressed] = ImVec4(1.0f, 0.0f, 0.0f, 0.5f);			  // Red
-	Colors[ImGuiKeyboardCol_KeyHighlighted] = ImVec4(0.0f, 1.0f, 0.0f, 0.5f);		  // Green
-	Colors[ImGuiKeyboardCol_KeyPressedHighlighted] = ImVec4(1.0f, 1.0f, 0.0f, 0.5f);  // Yellow
+	Colors[ImGuiKeyboardCol_BoardBackground] = ImVec4(0.2f, 0.2f, 0.2f, 1.0f);    // Dark gray
+	Colors[ImGuiKeyboardCol_KeyBackground] = ImVec4(0.8f, 0.8f, 0.8f, 1.0f);      // Light gray
+	Colors[ImGuiKeyboardCol_KeyBorder] = ImVec4(0.094f, 0.094f, 0.094f, 1.0f);    // Dark gray
+	Colors[ImGuiKeyboardCol_KeyFaceBorder] = ImVec4(0.757f, 0.757f, 0.757f, 1.0f);// Medium gray
+	Colors[ImGuiKeyboardCol_KeyFace] = ImVec4(0.988f, 0.988f, 0.988f, 1.0f);      // Near white
+	Colors[ImGuiKeyboardCol_KeyLabel] = ImVec4(0.25f, 0.25f, 0.25f, 1.0f);        // Dark text
+	Colors[ImGuiKeyboardCol_KeyPressed] = ImVec4(1.0f, 0.0f, 0.0f, 0.5f);         // Red
+	Colors[ImGuiKeyboardCol_KeyHighlighted] = ImVec4(0.0f, 1.0f, 0.0f, 0.5f);     // Green
+	Colors[ImGuiKeyboardCol_KeyPressedHighlighted] = ImVec4(1.0f, 1.0f, 0.0f, 0.5f);// Yellow
 }
 
 struct KeyLayoutData {
@@ -505,6 +507,10 @@ void Keyboard(ImGuiKeyboardLayout layout, ImGuiKeyboardFlags flags) {
 		return;
 	}
 
+	// Draw board background
+	const float board_rounding = style.BoardRounding * scale;
+	draw_list->AddRectFilled(board_min, board_max, GetColorU32(ImGuiKeyboardCol_BoardBackground), board_rounding);
+
 	draw_list->PushClipRect(board_min, board_max, true);
 
 	if (layout == ImGuiKeyboardLayout_NumericPad) {
@@ -761,6 +767,7 @@ void KeyboardDemo() {
 			ImGui::SliderFloat2("Key Face Offset", &style.KeyFaceOffset.x, 0.0f, 10.0f, "%.1f");
 			ImGui::SliderFloat2("Key Label Offset", &style.KeyLabelOffset.x, 0.0f, 15.0f, "%.1f");
 			ImGui::SliderFloat("Board Padding", &style.BoardPadding, 0.0f, 20.0f, "%.1f");
+			ImGui::SliderFloat("Board Rounding", &style.BoardRounding, 0.0f, 20.0f, "%.1f");
 
 			if (ImGui::Button("Reset Sizes")) {
 				ImGuiKeyboardStyle defaultStyle;
@@ -772,12 +779,13 @@ void KeyboardDemo() {
 				style.KeyFaceOffset = defaultStyle.KeyFaceOffset;
 				style.KeyLabelOffset = defaultStyle.KeyLabelOffset;
 				style.BoardPadding = defaultStyle.BoardPadding;
+				style.BoardRounding = defaultStyle.BoardRounding;
 			}
 			ImGui::TreePop();
 		}
 
 		if (ImGui::TreeNode("Colors")) {
-			const char *colorNames[] = {"Key Background", "Key Border",		 "Key Face Border",
+			const char *colorNames[] = {"Board Background", "Key Background", "Key Border",		 "Key Face Border",
 										"Key Face",		  "Key Label",		 "Key Pressed",
 										"Key Highlighted", "Key Pressed+Highlighted"};
 			for (int i = 0; i < ImGuiKeyboardCol_COUNT; i++) {
