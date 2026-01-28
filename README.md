@@ -2,6 +2,14 @@
 
 A virtual keyboard widget for [Dear ImGui](https://github.com/ocornut/imgui).
 
+![keyboard](imgui_keyboard1.png)
+
+![keyboard](imgui_keyboard2.png)
+
+![keyboard](imgui_keyboard3.png)
+
+![mouse](imgui_mouse.png)
+
 ![Demo](demo.png)
 
 ## Features
