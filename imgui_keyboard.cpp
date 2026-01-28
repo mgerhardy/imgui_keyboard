@@ -122,12 +122,12 @@ static const KeyLayoutData nav_cluster_keys[] = {
 	{0.0f, 1.0f, 1.0f, 1.0f, "Del", ImGuiKey_Delete},
 	{1.0f, 1.0f, 1.0f, 1.0f, "End", ImGuiKey_End},
 	{2.0f, 1.0f, 1.0f, 1.0f, "PgD", ImGuiKey_PageDown},
-	// Row 3 - Arrow Up (centered)
-	{1.0f, 2.5f, 1.0f, 1.0f, "^", ImGuiKey_UpArrow},
+	// Row 3 - Arrow Up (centered) - aligned with bottom modifier row
+	{1.0f, 3.0f, 1.0f, 1.0f, "^", ImGuiKey_UpArrow},
 	// Row 4 - Arrow Left, Down, Right
-	{0.0f, 3.5f, 1.0f, 1.0f, "<", ImGuiKey_LeftArrow},
-	{1.0f, 3.5f, 1.0f, 1.0f, "v", ImGuiKey_DownArrow},
-	{2.0f, 3.5f, 1.0f, 1.0f, ">", ImGuiKey_RightArrow},
+	{0.0f, 4.0f, 1.0f, 1.0f, "<", ImGuiKey_LeftArrow},
+	{1.0f, 4.0f, 1.0f, 1.0f, "v", ImGuiKey_DownArrow},
+	{2.0f, 4.0f, 1.0f, 1.0f, ">", ImGuiKey_RightArrow},
 };
 
 // Main keyboard - Number row
