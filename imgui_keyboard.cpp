@@ -160,7 +160,7 @@ static const KeyLayoutData number_row_qwertz_keys[] = {
 	{0.0f, 0.0f, 1.0f, 1.0f, "^", nullptr, ImGuiKey_GraveAccent},
 	{1.0f, 0.0f, 1.0f, 1.0f, "1", "!", ImGuiKey_1},
 	{2.0f, 0.0f, 1.0f, 1.0f, "2", "\"", ImGuiKey_2},
-	{3.0f, 0.0f, 1.0f, 1.0f, "3", nullptr, ImGuiKey_3},
+	{3.0f, 0.0f, 1.0f, 1.0f, "3", "\xc2\xa7", ImGuiKey_3},
 	{4.0f, 0.0f, 1.0f, 1.0f, "4", "$", ImGuiKey_4},
 	{5.0f, 0.0f, 1.0f, 1.0f, "5", "%", ImGuiKey_5},
 	{6.0f, 0.0f, 1.0f, 1.0f, "6", "&", ImGuiKey_6},
@@ -168,7 +168,7 @@ static const KeyLayoutData number_row_qwertz_keys[] = {
 	{8.0f, 0.0f, 1.0f, 1.0f, "8", "(", ImGuiKey_8},
 	{9.0f, 0.0f, 1.0f, 1.0f, "9", ")", ImGuiKey_9},
 	{10.0f, 0.0f, 1.0f, 1.0f, "0", "=", ImGuiKey_0},
-	{11.0f, 0.0f, 1.0f, 1.0f, "ss", "?", ImGuiKey_Minus},
+	{11.0f, 0.0f, 1.0f, 1.0f, "\xc3\x9f", "?", ImGuiKey_Minus},
 	{12.0f, 0.0f, 1.0f, 1.0f, "'", "`", ImGuiKey_Equal},
 	{13.0f, 0.0f, 2.0f, 1.0f, "Back", nullptr, ImGuiKey_Backspace},
 };
@@ -177,15 +177,15 @@ static const KeyLayoutData number_row_qwertz_keys[] = {
 static const KeyLayoutData number_row_azerty_keys[] = {
 	{0.0f, 0.0f, 1.0f, 1.0f, "2", nullptr, ImGuiKey_GraveAccent},
 	{1.0f, 0.0f, 1.0f, 1.0f, "&", "1", ImGuiKey_1},
-	{2.0f, 0.0f, 1.0f, 1.0f, "e'", "2", ImGuiKey_2},
+	{2.0f, 0.0f, 1.0f, 1.0f, "\xc3\xa9", "2", ImGuiKey_2},
 	{3.0f, 0.0f, 1.0f, 1.0f, "\"", "3", ImGuiKey_3},
 	{4.0f, 0.0f, 1.0f, 1.0f, "'", "4", ImGuiKey_4},
 	{5.0f, 0.0f, 1.0f, 1.0f, "(", "5", ImGuiKey_5},
 	{6.0f, 0.0f, 1.0f, 1.0f, "-", "6", ImGuiKey_6},
-	{7.0f, 0.0f, 1.0f, 1.0f, "e`", "7", ImGuiKey_7},
+	{7.0f, 0.0f, 1.0f, 1.0f, "\xc3\xa8", "7", ImGuiKey_7},
 	{8.0f, 0.0f, 1.0f, 1.0f, "_", "8", ImGuiKey_8},
-	{9.0f, 0.0f, 1.0f, 1.0f, "c,", "9", ImGuiKey_9},
-	{10.0f, 0.0f, 1.0f, 1.0f, "a`", "0", ImGuiKey_0},
+	{9.0f, 0.0f, 1.0f, 1.0f, "\xc3\xa7", "9", ImGuiKey_9},
+	{10.0f, 0.0f, 1.0f, 1.0f, "\xc3\xa0", "0", ImGuiKey_0},
 	{11.0f, 0.0f, 1.0f, 1.0f, ")", nullptr, ImGuiKey_Minus},
 	{12.0f, 0.0f, 1.0f, 1.0f, "=", "+", ImGuiKey_Equal},
 	{13.0f, 0.0f, 2.0f, 1.0f, "Back", nullptr, ImGuiKey_Backspace},
@@ -253,7 +253,7 @@ static const KeyLayoutData qwertz_row1_keys[] = {
 	{8.5f, 0.0f, 1.0f, 1.0f, "I", nullptr, ImGuiKey_I},
 	{9.5f, 0.0f, 1.0f, 1.0f, "O", nullptr, ImGuiKey_O},
 	{10.5f, 0.0f, 1.0f, 1.0f, "P", nullptr, ImGuiKey_P},
-	{11.5f, 0.0f, 1.0f, 1.0f, "U:", nullptr, ImGuiKey_LeftBracket},
+	{11.5f, 0.0f, 1.0f, 1.0f, "\xc3\x9c", nullptr, ImGuiKey_LeftBracket},
 	{12.5f, 0.0f, 1.0f, 1.0f, "+", "*", ImGuiKey_RightBracket},
 	{13.5f, 0.0f, 1.5f, 1.0f, "#", "'", ImGuiKey_Backslash},
 };
@@ -269,8 +269,8 @@ static const KeyLayoutData qwertz_row2_keys[] = {
 	{7.75f, 0.0f, 1.0f, 1.0f, "J", nullptr, ImGuiKey_J},
 	{8.75f, 0.0f, 1.0f, 1.0f, "K", nullptr, ImGuiKey_K},
 	{9.75f, 0.0f, 1.0f, 1.0f, "L", nullptr, ImGuiKey_L},
-	{10.75f, 0.0f, 1.0f, 1.0f, "O:", nullptr, ImGuiKey_Semicolon},
-	{11.75f, 0.0f, 1.0f, 1.0f, "A:", nullptr, ImGuiKey_Apostrophe},
+	{10.75f, 0.0f, 1.0f, 1.0f, "\xc3\x96", nullptr, ImGuiKey_Semicolon},
+	{11.75f, 0.0f, 1.0f, 1.0f, "\xc3\x84", nullptr, ImGuiKey_Apostrophe},
 	{12.75f, 0.0f, 2.25f, 1.0f, "Enter", nullptr, ImGuiKey_Enter},
 };
 
@@ -319,7 +319,7 @@ static const KeyLayoutData azerty_row2_keys[] = {
 	{8.75f, 0.0f, 1.0f, 1.0f, "K", nullptr, ImGuiKey_K},
 	{9.75f, 0.0f, 1.0f, 1.0f, "L", nullptr, ImGuiKey_L},
 	{10.75f, 0.0f, 1.0f, 1.0f, "M", nullptr, ImGuiKey_M},
-	{11.75f, 0.0f, 1.0f, 1.0f, "u`", "%", ImGuiKey_Apostrophe},
+	{11.75f, 0.0f, 1.0f, 1.0f, "\xc3\xb9", "%", ImGuiKey_Apostrophe},
 	{12.75f, 0.0f, 2.25f, 1.0f, "Enter", nullptr, ImGuiKey_Enter},
 };
 
@@ -460,7 +460,137 @@ static void RenderKey(ImDrawList *draw_list, const ImVec2 &key_min, const ImVec2
 
 	// Label rendering
 	ImVec2 label_min = ImVec2(key_min.x + key_label_pos.x, key_min.y + key_label_pos.y);
-	if ((flags & ImGuiKeyboardFlags_ShowBothLabels) && shiftLabel) {
+
+	// Check if we should draw icons instead of text
+	const bool showIcons = (flags & ImGuiKeyboardFlags_ShowIcons);
+	const bool isWindowsKey = (key == ImGuiKey_LeftSuper || key == ImGuiKey_RightSuper);
+	const bool isArrowKey = (key == ImGuiKey_UpArrow || key == ImGuiKey_DownArrow || key == ImGuiKey_LeftArrow ||
+							 key == ImGuiKey_RightArrow);
+	const bool isShiftKey = (key == ImGuiKey_LeftShift || key == ImGuiKey_RightShift);
+	const bool isTabKey = (key == ImGuiKey_Tab);
+	const bool isCapsLockKey = (key == ImGuiKey_CapsLock);
+	const bool isEnterKey = (key == ImGuiKey_Enter || key == ImGuiKey_KeypadEnter);
+
+	if (showIcons && isWindowsKey) {
+		// Draw Windows logo (4 squares in a 2x2 grid)
+		const float logo_size = ImGui::GetFontSize() * 0.9f;
+		const float quad_size = logo_size * 0.45f;
+		const float gap = logo_size * 0.1f;
+		ImVec2 logo_min = ImVec2(label_min.x, label_min.y);
+		ImU32 logo_color = GetColorU32(ImGuiKeyboardCol_KeyLabel);
+
+		// Top-left quad
+		draw_list->AddRectFilled(logo_min, ImVec2(logo_min.x + quad_size, logo_min.y + quad_size), logo_color);
+		// Top-right quad
+		draw_list->AddRectFilled(ImVec2(logo_min.x + quad_size + gap, logo_min.y),
+								 ImVec2(logo_min.x + quad_size * 2.0f + gap, logo_min.y + quad_size), logo_color);
+		// Bottom-left quad
+		draw_list->AddRectFilled(ImVec2(logo_min.x, logo_min.y + quad_size + gap),
+								 ImVec2(logo_min.x + quad_size, logo_min.y + quad_size * 2.0f + gap), logo_color);
+		// Bottom-right quad
+		draw_list->AddRectFilled(ImVec2(logo_min.x + quad_size + gap, logo_min.y + quad_size + gap),
+								 ImVec2(logo_min.x + quad_size * 2.0f + gap, logo_min.y + quad_size * 2.0f + gap),
+								 logo_color);
+	} else if (showIcons && isArrowKey) {
+		// Draw arrow triangles
+		const float arrow_size = ImGui::GetFontSize() * 0.7f;
+		ImU32 arrow_color = GetColorU32(ImGuiKeyboardCol_KeyLabel);
+		ImVec2 center = ImVec2(label_min.x + arrow_size * 0.5f, label_min.y + arrow_size * 0.5f);
+
+		if (key == ImGuiKey_UpArrow) {
+			// Triangle pointing up
+			draw_list->AddTriangleFilled(ImVec2(center.x, center.y - arrow_size * 0.5f),
+										 ImVec2(center.x - arrow_size * 0.5f, center.y + arrow_size * 0.5f),
+										 ImVec2(center.x + arrow_size * 0.5f, center.y + arrow_size * 0.5f),
+										 arrow_color);
+		} else if (key == ImGuiKey_DownArrow) {
+			// Triangle pointing down
+			draw_list->AddTriangleFilled(ImVec2(center.x, center.y + arrow_size * 0.5f),
+										 ImVec2(center.x - arrow_size * 0.5f, center.y - arrow_size * 0.5f),
+										 ImVec2(center.x + arrow_size * 0.5f, center.y - arrow_size * 0.5f),
+										 arrow_color);
+		} else if (key == ImGuiKey_LeftArrow) {
+			// Triangle pointing left
+			draw_list->AddTriangleFilled(ImVec2(center.x - arrow_size * 0.5f, center.y),
+										 ImVec2(center.x + arrow_size * 0.5f, center.y - arrow_size * 0.5f),
+										 ImVec2(center.x + arrow_size * 0.5f, center.y + arrow_size * 0.5f),
+										 arrow_color);
+		} else if (key == ImGuiKey_RightArrow) {
+			// Triangle pointing right
+			draw_list->AddTriangleFilled(ImVec2(center.x + arrow_size * 0.5f, center.y),
+										 ImVec2(center.x - arrow_size * 0.5f, center.y - arrow_size * 0.5f),
+										 ImVec2(center.x - arrow_size * 0.5f, center.y + arrow_size * 0.5f),
+										 arrow_color);
+		}
+	} else if (showIcons && isShiftKey) {
+		// Draw Shift icon
+		const float icon_size = ImGui::GetFontSize() * 0.8f;
+		ImU32 icon_color = GetColorU32(ImGuiKeyboardCol_KeyLabel);
+		ImVec2 center = ImVec2(label_min.x + icon_size * 0.5f, label_min.y + icon_size * 0.5f);
+		const float half = icon_size * 0.5f;
+		const float thickness = icon_size * 0.15f;
+
+		// Outer triangle (arrow head)
+		draw_list->AddTriangleFilled(ImVec2(center.x, center.y - half), ImVec2(center.x - half, center.y + half * 0.2f),
+									 ImVec2(center.x + half, center.y + half * 0.2f), icon_color);
+		// Stem rectangle
+		draw_list->AddRectFilled(ImVec2(center.x - thickness, center.y + half * 0.2f),
+								 ImVec2(center.x + thickness, center.y + half), icon_color);
+	} else if (showIcons && isTabKey) {
+		// Draw Tab icon (arrow pointing right with vertical bar)
+		const float icon_size = ImGui::GetFontSize() * 0.8f;
+		ImU32 icon_color = GetColorU32(ImGuiKeyboardCol_KeyLabel);
+		ImVec2 center = ImVec2(label_min.x + icon_size * 0.5f, label_min.y + icon_size * 0.5f);
+		const float half = icon_size * 0.5f;
+		const float thickness = icon_size * 0.12f;
+
+		// Horizontal line
+		draw_list->AddRectFilled(ImVec2(center.x - half, center.y - thickness * 0.5f),
+								 ImVec2(center.x + half * 0.5f, center.y + thickness * 0.5f), icon_color);
+		// Arrow head (triangle pointing right)
+		draw_list->AddTriangleFilled(ImVec2(center.x + half * 0.5f, center.y - half * 0.4f),
+									 ImVec2(center.x + half * 0.5f, center.y + half * 0.4f),
+									 ImVec2(center.x + half, center.y), icon_color);
+		// Vertical bar at end
+		draw_list->AddRectFilled(ImVec2(center.x + half - thickness, center.y - half * 0.5f),
+								 ImVec2(center.x + half, center.y + half * 0.5f), icon_color);
+	} else if (showIcons && isCapsLockKey) {
+		// Draw Caps Lock icon (upward arrow with horizontal bar underneath)
+		const float icon_size = ImGui::GetFontSize() * 0.8f;
+		ImU32 icon_color = GetColorU32(ImGuiKeyboardCol_KeyLabel);
+		ImVec2 center = ImVec2(label_min.x + icon_size * 0.5f, label_min.y + icon_size * 0.5f);
+		const float half = icon_size * 0.5f;
+		const float thickness = icon_size * 0.15f;
+
+		// Arrow head pointing up
+		draw_list->AddTriangleFilled(ImVec2(center.x, center.y - half),
+									 ImVec2(center.x - half * 0.6f, center.y - half * 0.1f),
+									 ImVec2(center.x + half * 0.6f, center.y - half * 0.1f), icon_color);
+		// Stem
+		draw_list->AddRectFilled(ImVec2(center.x - thickness, center.y - half * 0.1f),
+								 ImVec2(center.x + thickness, center.y + half * 0.4f), icon_color);
+		// Horizontal bar underneath
+		draw_list->AddRectFilled(ImVec2(center.x - half * 0.5f, center.y + half * 0.6f),
+								 ImVec2(center.x + half * 0.5f, center.y + half * 0.8f), icon_color);
+	} else if (showIcons && isEnterKey) {
+		// Draw Enter icon
+		const float icon_size = ImGui::GetFontSize() * 0.8f;
+		ImU32 icon_color = GetColorU32(ImGuiKeyboardCol_KeyLabel);
+		ImVec2 start = ImVec2(label_min.x, label_min.y);
+		const float thickness = icon_size * 0.12f;
+
+		// Vertical line going up on the right
+		draw_list->AddRectFilled(ImVec2(start.x + icon_size * 0.8f - thickness, start.y),
+								 ImVec2(start.x + icon_size * 0.8f, start.y + icon_size * 0.5f), icon_color);
+		// Horizontal line going left
+		draw_list->AddRectFilled(ImVec2(start.x + icon_size * 0.15f, start.y + icon_size * 0.5f - thickness),
+								 ImVec2(start.x + icon_size * 0.8f, start.y + icon_size * 0.5f), icon_color);
+		// Arrow head pointing left
+		draw_list->AddTriangleFilled(
+			ImVec2(start.x, start.y + icon_size * 0.5f - thickness * 0.5f),
+			ImVec2(start.x + icon_size * 0.25f, start.y + icon_size * 0.5f - icon_size * 0.25f),
+			ImVec2(start.x + icon_size * 0.25f, start.y + icon_size * 0.5f + icon_size * 0.15f), icon_color);
+	} else if ((flags & ImGuiKeyboardFlags_ShowBothLabels) && shiftLabel) {
 		// Show both labels: shift label on top, normal label below
 		const float lineHeight = ImGui::GetFontSize();
 		draw_list->AddText(label_min, GetColorU32(ImGuiKeyboardCol_KeyLabel), shiftLabel);
@@ -683,6 +813,7 @@ void KeyboardDemo() {
 	static bool showPressed = true;
 	static bool noShiftLabels = false;
 	static bool showBothLabels = false;
+	static bool showIcons = false;
 	static int currentLayout = ImGuiKeyboardLayout_Qwerty;
 	static bool highlightWASD = false;
 	static bool highlightArrows = false;
@@ -722,6 +853,7 @@ void KeyboardDemo() {
 			showBothLabels = false; // Disable conflicting option
 		}
 	}
+	ImGui::Checkbox("Show Icons", &showIcons);
 
 	ImGui::Separator();
 	ImGui::Text("Highlight Groups (Green):");
@@ -867,6 +999,9 @@ void KeyboardDemo() {
 	}
 	if (showBothLabels) {
 		flags |= ImGuiKeyboardFlags_ShowBothLabels;
+	}
+	if (showIcons) {
+		flags |= ImGuiKeyboardFlags_ShowIcons;
 	}
 	Keyboard((ImGuiKeyboardLayout)currentLayout, flags);
 }

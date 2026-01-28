@@ -44,22 +44,23 @@ typedef int ImGuiKeyboardLayout;
 
 enum ImGuiKeyboardFlags_ {
 	ImGuiKeyboardFlags_None = 0,
-	ImGuiKeyboardFlags_ShowPressed = 1 << 0, // Highlight keys that are currently pressed
-	ImGuiKeyboardFlags_NoShiftLabels = 1 << 1, // Don't show shift labels when Shift is pressed
+	ImGuiKeyboardFlags_ShowPressed = 1 << 0,	// Highlight keys that are currently pressed
+	ImGuiKeyboardFlags_NoShiftLabels = 1 << 1,	// Don't show shift labels when Shift is pressed
 	ImGuiKeyboardFlags_ShowBothLabels = 1 << 2, // Always show both normal and shift labels (shift label below)
+	ImGuiKeyboardFlags_ShowIcons = 1 << 3,		// Show icons instead of text (Windows logo, arrow triangles)
 };
 typedef int ImGuiKeyboardFlags;
 
 // Style colors for the keyboard widget
 enum ImGuiKeyboardCol_ {
-	ImGuiKeyboardCol_BoardBackground,	// Board background color
-	ImGuiKeyboardCol_KeyBackground,		// Key background color
-	ImGuiKeyboardCol_KeyBorder,			// Key border color
-	ImGuiKeyboardCol_KeyFaceBorder,		// Key face border color
-	ImGuiKeyboardCol_KeyFace,			// Key face fill color
-	ImGuiKeyboardCol_KeyLabel,			// Key label text color
-	ImGuiKeyboardCol_KeyPressed,		// Overlay color when key is pressed
-	ImGuiKeyboardCol_KeyHighlighted,	// Overlay color when key is highlighted
+	ImGuiKeyboardCol_BoardBackground,		// Board background color
+	ImGuiKeyboardCol_KeyBackground,			// Key background color
+	ImGuiKeyboardCol_KeyBorder,				// Key border color
+	ImGuiKeyboardCol_KeyFaceBorder,			// Key face border color
+	ImGuiKeyboardCol_KeyFace,				// Key face fill color
+	ImGuiKeyboardCol_KeyLabel,				// Key label text color
+	ImGuiKeyboardCol_KeyPressed,			// Overlay color when key is pressed
+	ImGuiKeyboardCol_KeyHighlighted,		// Overlay color when key is highlighted
 	ImGuiKeyboardCol_KeyPressedHighlighted, // Overlay color when key is both pressed and highlighted
 
 	ImGuiKeyboardCol_COUNT
@@ -69,16 +70,16 @@ typedef int ImGuiKeyboardCol;
 // Style struct for keyboard appearance
 struct ImGuiKeyboardStyle {
 	// Sizes (in pixels, before scaling)
-	float KeyUnit;			// Base key size unit (default: 34.0f)
-	float SectionGap;		// Gap between keyboard sections (default: 15.0f)
-	float KeyBorderSize;	// Key border thickness - defines visual gap between keys (default: 1.0f)
-	float KeyRounding;		// Key corner rounding (default: 3.0f)
-	float KeyFaceRounding;	// Key face corner rounding (default: 2.0f)
-	float KeyFaceBorderSize;// Key face border thickness (default: 2.0f)
-	ImVec2 KeyFaceOffset;	// Offset of key face from key edge (default: 4.0f, 3.0f)
-	ImVec2 KeyLabelOffset;	// Offset of label from key edge (default: 6.0f, 4.0f)
-	float BoardPadding;		// Padding around keyboard (default: 5.0f)
-	float BoardRounding;	// Board corner rounding (default: 5.0f)
+	float KeyUnit;			 // Base key size unit (default: 34.0f)
+	float SectionGap;		 // Gap between keyboard sections (default: 15.0f)
+	float KeyBorderSize;	 // Key border thickness - defines visual gap between keys (default: 1.0f)
+	float KeyRounding;		 // Key corner rounding (default: 3.0f)
+	float KeyFaceRounding;	 // Key face corner rounding (default: 2.0f)
+	float KeyFaceBorderSize; // Key face border thickness (default: 2.0f)
+	ImVec2 KeyFaceOffset;	 // Offset of key face from key edge (default: 4.0f, 3.0f)
+	ImVec2 KeyLabelOffset;	 // Offset of label from key edge (default: 6.0f, 4.0f)
+	float BoardPadding;		 // Padding around keyboard (default: 5.0f)
+	float BoardRounding;	 // Board corner rounding (default: 5.0f)
 
 	// Colors
 	ImVec4 Colors[ImGuiKeyboardCol_COUNT];
