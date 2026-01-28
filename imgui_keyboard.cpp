@@ -88,7 +88,7 @@ static const KeyLayoutData numpad_keys[] = {
 	{2.0f, 4.0f, 1.0f, 1.0f, ".", ImGuiKey_KeypadDecimal},
 };
 
-// Function key row (F1-F12 + Esc, Print, etc.)
+// Function key row (F1-F12 + Esc)
 static const KeyLayoutData function_row_keys[] = {
 	{0.0f, 0.0f, 1.0f, 1.0f, "Esc", ImGuiKey_Escape},
 	// Gap
@@ -106,10 +106,13 @@ static const KeyLayoutData function_row_keys[] = {
 	{12.0f, 0.0f, 1.0f, 1.0f, "F10", ImGuiKey_F10},
 	{13.0f, 0.0f, 1.0f, 1.0f, "F11", ImGuiKey_F11},
 	{14.0f, 0.0f, 1.0f, 1.0f, "F12", ImGuiKey_F12},
-	// Print, Scroll, Pause
-	{15.25f, 0.0f, 1.0f, 1.0f, "Prt", ImGuiKey_PrintScreen},
-	{16.25f, 0.0f, 1.0f, 1.0f, "Scr", ImGuiKey_ScrollLock},
-	{17.25f, 0.0f, 1.0f, 1.0f, "Pse", ImGuiKey_Pause},
+};
+
+// Print, Scroll, Pause - rendered separately to align with nav cluster using section_gap
+static const KeyLayoutData function_row_nav_keys[] = {
+	{0.0f, 0.0f, 1.0f, 1.0f, "Prt", ImGuiKey_PrintScreen},
+	{1.0f, 0.0f, 1.0f, 1.0f, "Scr", ImGuiKey_ScrollLock},
+	{2.0f, 0.0f, 1.0f, 1.0f, "Pse", ImGuiKey_Pause},
 };
 
 // Navigation cluster (Insert, Delete, Home, End, PageUp, PageDown, Arrows)
@@ -475,9 +478,16 @@ void Keyboard(ImGuiKeyboardLayout layout, ImGuiKeyboardFlags flags) {
 	} else {
 		// Full keyboard rendering
 
+		// Navigation cluster X position (used for Print/Scroll/Pause alignment)
+		float nav_x = start_pos.x + 15.0f * key_unit + section_gap;
+
 		// Function row (with gap below)
 		ImVec2 func_row_pos = start_pos;
 		RenderKeyRow(draw_list, function_row_keys, IM_ARRAYSIZE(function_row_keys), func_row_pos, key_unit, scale,
+					 flags);
+		// Print, Scroll, Pause - aligned with nav cluster
+		ImVec2 func_row_nav_pos = ImVec2(nav_x, start_pos.y);
+		RenderKeyRow(draw_list, function_row_nav_keys, IM_ARRAYSIZE(function_row_nav_keys), func_row_nav_pos, key_unit, scale,
 					 flags);
 
 		// Main keyboard section (offset by function row + gap)
@@ -550,7 +560,6 @@ void Keyboard(ImGuiKeyboardLayout layout, ImGuiKeyboardFlags flags) {
 		RenderKeyRow(draw_list, bottom_row_keys, IM_ARRAYSIZE(bottom_row_keys), bottom_row_pos, key_unit, scale, flags);
 
 		// Navigation cluster (Insert/Delete/Home/End/PgUp/PgDn + arrows)
-		float nav_x = start_pos.x + 15.0f * key_unit + section_gap;
 		ImVec2 nav_pos = ImVec2(nav_x, main_section_y);
 		RenderKeyRow(draw_list, nav_cluster_keys, IM_ARRAYSIZE(nav_cluster_keys), nav_pos, key_unit, scale, flags);
 
