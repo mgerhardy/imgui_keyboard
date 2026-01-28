@@ -71,6 +71,7 @@ struct ImGuiKeyboardStyle {
 	// Sizes (in pixels, before scaling)
 	float KeyUnit;			// Base key size unit (default: 34.0f)
 	float SectionGap;		// Gap between keyboard sections (default: 15.0f)
+	float KeyBorderSize;	// Key border thickness - defines visual gap between keys (default: 1.0f)
 	float KeyRounding;		// Key corner rounding (default: 3.0f)
 	float KeyFaceRounding;	// Key face corner rounding (default: 2.0f)
 	float KeyFaceBorderSize;// Key face border thickness (default: 2.0f)
