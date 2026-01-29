@@ -40,6 +40,8 @@ enum ImGuiKeyboardLayout_ {
 	ImGuiKeyboardLayout_QwertyISO,	 // ISO (UK/International)
 	ImGuiKeyboardLayout_QwertzISO,	 // ISO (German)
 	ImGuiKeyboardLayout_AzertyISO,	 // ISO (French)
+	ImGuiKeyboardLayout_AppleANSI,	 // Apple ANSI (US)
+	ImGuiKeyboardLayout_AppleISO,	 // Apple ISO (UK/International)
 
 	ImGuiKeyboardLayout_Count
 };

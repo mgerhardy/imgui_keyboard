@@ -132,6 +132,13 @@ static const KeyLayoutData function_row_nav_keys[] = {
 	{2.0f, 0.0f, 1.0f, 1.0f, "Pse", nullptr, ImGuiKey_Pause},
 };
 
+// Apple layout: F13, F14, F15 instead of Print Screen, Scroll Lock, Pause
+static const KeyLayoutData apple_function_row_nav_keys[] = {
+	{0.0f, 0.0f, 1.0f, 1.0f, "F13", nullptr, ImGuiKey_PrintScreen},
+	{1.0f, 0.0f, 1.0f, 1.0f, "F14", nullptr, ImGuiKey_ScrollLock},
+	{2.0f, 0.0f, 1.0f, 1.0f, "F15", nullptr, ImGuiKey_Pause},
+};
+
 // Navigation cluster (Insert, Delete, Home, End, PageUp, PageDown, Arrows)
 static const KeyLayoutData nav_cluster_keys[] = {
 	// Row 0 - Insert, Home, PageUp
@@ -441,7 +448,7 @@ static const KeyLayoutData dvorak_row3_keys[] = {
 // - Shorter left Shift with extra key next to it
 // - No backslash key on row 1 (it's part of Enter or moved to row 3)
 
-// ISO QWERTY row 1 - no backslash, Enter extends here
+// ISO QWERTY row 1 - Enter key rendered separately as L-shape
 static const KeyLayoutData qwerty_iso_row1_keys[] = {
 	{0.0f, 0.0f, 1.5f, 1.0f, "Tab", nullptr, ImGuiKey_Tab},
 	{1.5f, 0.0f, 1.0f, 1.0f, "Q", nullptr, ImGuiKey_Q},
@@ -456,11 +463,9 @@ static const KeyLayoutData qwerty_iso_row1_keys[] = {
 	{10.5f, 0.0f, 1.0f, 1.0f, "P", nullptr, ImGuiKey_P},
 	{11.5f, 0.0f, 1.0f, 1.0f, "[", "{", ImGuiKey_LeftBracket},
 	{12.5f, 0.0f, 1.0f, 1.0f, "]", "}", ImGuiKey_RightBracket},
-	// Enter key top part (1.5 wide, extends down in row 2)
-	{13.5f, 0.0f, 1.5f, 2.0f, "Enter", nullptr, ImGuiKey_Enter},
 };
 
-// ISO QWERTY row 2 - Enter is part of the L-shape from row 1
+// ISO QWERTY row 2 - Enter key is rendered separately as L-shape polygon
 static const KeyLayoutData qwerty_iso_row2_keys[] = {
 	{0.0f, 0.0f, 1.75f, 1.0f, "Caps", nullptr, ImGuiKey_CapsLock},
 	{1.75f, 0.0f, 1.0f, 1.0f, "A", nullptr, ImGuiKey_A},
@@ -474,8 +479,7 @@ static const KeyLayoutData qwerty_iso_row2_keys[] = {
 	{9.75f, 0.0f, 1.0f, 1.0f, "L", nullptr, ImGuiKey_L},
 	{10.75f, 0.0f, 1.0f, 1.0f, ";", ":", ImGuiKey_Semicolon},
 	{11.75f, 0.0f, 1.0f, 1.0f, "'", "\"", ImGuiKey_Apostrophe},
-	{12.75f, 0.0f, 1.0f, 1.0f, "#", "~", ImGuiKey_Backslash}, // ISO hash key
-	// Enter is rendered as part of row 1 (tall key)
+	{12.75f, 0.0f, 1.0f, 1.0f, "#", "~", ImGuiKey_Backslash}, // ISO hash key (left of Enter)
 };
 
 // ISO QWERTY row 3 - shorter left Shift with extra key
@@ -510,7 +514,6 @@ static const KeyLayoutData qwertz_iso_row1_keys[] = {
 	{10.5f, 0.0f, 1.0f, 1.0f, "P", nullptr, ImGuiKey_P},
 	{11.5f, 0.0f, 1.0f, 1.0f, "\xc3\x9c", nullptr, ImGuiKey_LeftBracket},
 	{12.5f, 0.0f, 1.0f, 1.0f, "+", "*", ImGuiKey_RightBracket},
-	{13.5f, 0.0f, 1.5f, 2.0f, "Enter", nullptr, ImGuiKey_Enter},
 };
 
 static const KeyLayoutData qwertz_iso_row2_keys[] = {
@@ -560,7 +563,6 @@ static const KeyLayoutData azerty_iso_row1_keys[] = {
 	{10.5f, 0.0f, 1.0f, 1.0f, "P", nullptr, ImGuiKey_P},
 	{11.5f, 0.0f, 1.0f, 1.0f, "^", nullptr, ImGuiKey_LeftBracket},
 	{12.5f, 0.0f, 1.0f, 1.0f, "$", nullptr, ImGuiKey_RightBracket},
-	{13.5f, 0.0f, 1.5f, 2.0f, "Enter", nullptr, ImGuiKey_Enter},
 };
 
 static const KeyLayoutData azerty_iso_row2_keys[] = {
@@ -592,6 +594,118 @@ static const KeyLayoutData azerty_iso_row3_keys[] = {
 	{9.25f, 0.0f, 1.0f, 1.0f, ";", ".", ImGuiKey_Semicolon},
 	{10.25f, 0.0f, 1.0f, 1.0f, ":", "/", ImGuiKey_Period},
 	{11.25f, 0.0f, 1.0f, 1.0f, "!", nullptr, ImGuiKey_Slash},
+	{12.25f, 0.0f, 2.75f, 1.0f, "Shift", nullptr, ImGuiKey_RightShift},
+};
+
+// Apple ANSI layout rows (US Mac keyboard)
+// Apple keyboards use Command (⌘) instead of Win, Option instead of Alt
+static const KeyLayoutData apple_ansi_row1_keys[] = {
+	{0.0f, 0.0f, 1.5f, 1.0f, "Tab", nullptr, ImGuiKey_Tab},
+	{1.5f, 0.0f, 1.0f, 1.0f, "Q", nullptr, ImGuiKey_Q},
+	{2.5f, 0.0f, 1.0f, 1.0f, "W", nullptr, ImGuiKey_W},
+	{3.5f, 0.0f, 1.0f, 1.0f, "E", nullptr, ImGuiKey_E},
+	{4.5f, 0.0f, 1.0f, 1.0f, "R", nullptr, ImGuiKey_R},
+	{5.5f, 0.0f, 1.0f, 1.0f, "T", nullptr, ImGuiKey_T},
+	{6.5f, 0.0f, 1.0f, 1.0f, "Y", nullptr, ImGuiKey_Y},
+	{7.5f, 0.0f, 1.0f, 1.0f, "U", nullptr, ImGuiKey_U},
+	{8.5f, 0.0f, 1.0f, 1.0f, "I", nullptr, ImGuiKey_I},
+	{9.5f, 0.0f, 1.0f, 1.0f, "O", nullptr, ImGuiKey_O},
+	{10.5f, 0.0f, 1.0f, 1.0f, "P", nullptr, ImGuiKey_P},
+	{11.5f, 0.0f, 1.0f, 1.0f, "[", "{", ImGuiKey_LeftBracket},
+	{12.5f, 0.0f, 1.0f, 1.0f, "]", "}", ImGuiKey_RightBracket},
+	{13.5f, 0.0f, 1.5f, 1.0f, "\\", "|", ImGuiKey_Backslash},
+};
+
+static const KeyLayoutData apple_ansi_row2_keys[] = {
+	{0.0f, 0.0f, 1.75f, 1.0f, "Caps", nullptr, ImGuiKey_CapsLock},
+	{1.75f, 0.0f, 1.0f, 1.0f, "A", nullptr, ImGuiKey_A},
+	{2.75f, 0.0f, 1.0f, 1.0f, "S", nullptr, ImGuiKey_S},
+	{3.75f, 0.0f, 1.0f, 1.0f, "D", nullptr, ImGuiKey_D},
+	{4.75f, 0.0f, 1.0f, 1.0f, "F", nullptr, ImGuiKey_F},
+	{5.75f, 0.0f, 1.0f, 1.0f, "G", nullptr, ImGuiKey_G},
+	{6.75f, 0.0f, 1.0f, 1.0f, "H", nullptr, ImGuiKey_H},
+	{7.75f, 0.0f, 1.0f, 1.0f, "J", nullptr, ImGuiKey_J},
+	{8.75f, 0.0f, 1.0f, 1.0f, "K", nullptr, ImGuiKey_K},
+	{9.75f, 0.0f, 1.0f, 1.0f, "L", nullptr, ImGuiKey_L},
+	{10.75f, 0.0f, 1.0f, 1.0f, ";", ":", ImGuiKey_Semicolon},
+	{11.75f, 0.0f, 1.0f, 1.0f, "'", "\"", ImGuiKey_Apostrophe},
+	{12.75f, 0.0f, 2.25f, 1.0f, "Return", nullptr, ImGuiKey_Enter},
+};
+
+static const KeyLayoutData apple_ansi_row3_keys[] = {
+	{0.0f, 0.0f, 2.25f, 1.0f, "Shift", nullptr, ImGuiKey_LeftShift},
+	{2.25f, 0.0f, 1.0f, 1.0f, "Z", nullptr, ImGuiKey_Z},
+	{3.25f, 0.0f, 1.0f, 1.0f, "X", nullptr, ImGuiKey_X},
+	{4.25f, 0.0f, 1.0f, 1.0f, "C", nullptr, ImGuiKey_C},
+	{5.25f, 0.0f, 1.0f, 1.0f, "V", nullptr, ImGuiKey_V},
+	{6.25f, 0.0f, 1.0f, 1.0f, "B", nullptr, ImGuiKey_B},
+	{7.25f, 0.0f, 1.0f, 1.0f, "N", nullptr, ImGuiKey_N},
+	{8.25f, 0.0f, 1.0f, 1.0f, "M", nullptr, ImGuiKey_M},
+	{9.25f, 0.0f, 1.0f, 1.0f, ",", "<", ImGuiKey_Comma},
+	{10.25f, 0.0f, 1.0f, 1.0f, ".", ">", ImGuiKey_Period},
+	{11.25f, 0.0f, 1.0f, 1.0f, "/", "?", ImGuiKey_Slash},
+	{12.25f, 0.0f, 2.75f, 1.0f, "Shift", nullptr, ImGuiKey_RightShift},
+};
+
+// Apple full keyboard bottom row (Ctrl, Option, Command, Space, Command, Option, Ctrl)
+// Full-size layout like Apple Magic Keyboard with Numeric Keypad - no Fn key, wider modifier keys
+static const KeyLayoutData apple_bottom_row_keys[] = {
+	{0.0f, 0.0f, 1.5f, 1.0f, "Ctrl", nullptr, ImGuiKey_LeftCtrl},
+	{1.5f, 0.0f, 1.25f, 1.0f, "Opt", nullptr, ImGuiKey_LeftAlt},
+	{2.75f, 0.0f, 1.5f, 1.0f, "Cmd", nullptr, ImGuiKey_LeftSuper},
+	{4.25f, 0.0f, 6.25f, 1.0f, "Space", nullptr, ImGuiKey_Space},
+	{10.5f, 0.0f, 1.5f, 1.0f, "Cmd", nullptr, ImGuiKey_RightSuper},
+	{12.0f, 0.0f, 1.25f, 1.0f, "Opt", nullptr, ImGuiKey_RightAlt},
+	{13.25f, 0.0f, 1.75f, 1.0f, "Ctrl", nullptr, ImGuiKey_RightCtrl},
+};
+
+// Apple ISO layout rows (UK/International Mac keyboard)
+// Same as Apple ANSI but with ISO Enter key and extra key next to left Shift
+static const KeyLayoutData apple_iso_row1_keys[] = {
+	{0.0f, 0.0f, 1.5f, 1.0f, "Tab", nullptr, ImGuiKey_Tab},
+	{1.5f, 0.0f, 1.0f, 1.0f, "Q", nullptr, ImGuiKey_Q},
+	{2.5f, 0.0f, 1.0f, 1.0f, "W", nullptr, ImGuiKey_W},
+	{3.5f, 0.0f, 1.0f, 1.0f, "E", nullptr, ImGuiKey_E},
+	{4.5f, 0.0f, 1.0f, 1.0f, "R", nullptr, ImGuiKey_R},
+	{5.5f, 0.0f, 1.0f, 1.0f, "T", nullptr, ImGuiKey_T},
+	{6.5f, 0.0f, 1.0f, 1.0f, "Y", nullptr, ImGuiKey_Y},
+	{7.5f, 0.0f, 1.0f, 1.0f, "U", nullptr, ImGuiKey_U},
+	{8.5f, 0.0f, 1.0f, 1.0f, "I", nullptr, ImGuiKey_I},
+	{9.5f, 0.0f, 1.0f, 1.0f, "O", nullptr, ImGuiKey_O},
+	{10.5f, 0.0f, 1.0f, 1.0f, "P", nullptr, ImGuiKey_P},
+	{11.5f, 0.0f, 1.0f, 1.0f, "[", "{", ImGuiKey_LeftBracket},
+	{12.5f, 0.0f, 1.0f, 1.0f, "]", "}", ImGuiKey_RightBracket},
+};
+
+static const KeyLayoutData apple_iso_row2_keys[] = {
+	{0.0f, 0.0f, 1.75f, 1.0f, "Caps", nullptr, ImGuiKey_CapsLock},
+	{1.75f, 0.0f, 1.0f, 1.0f, "A", nullptr, ImGuiKey_A},
+	{2.75f, 0.0f, 1.0f, 1.0f, "S", nullptr, ImGuiKey_S},
+	{3.75f, 0.0f, 1.0f, 1.0f, "D", nullptr, ImGuiKey_D},
+	{4.75f, 0.0f, 1.0f, 1.0f, "F", nullptr, ImGuiKey_F},
+	{5.75f, 0.0f, 1.0f, 1.0f, "G", nullptr, ImGuiKey_G},
+	{6.75f, 0.0f, 1.0f, 1.0f, "H", nullptr, ImGuiKey_H},
+	{7.75f, 0.0f, 1.0f, 1.0f, "J", nullptr, ImGuiKey_J},
+	{8.75f, 0.0f, 1.0f, 1.0f, "K", nullptr, ImGuiKey_K},
+	{9.75f, 0.0f, 1.0f, 1.0f, "L", nullptr, ImGuiKey_L},
+	{10.75f, 0.0f, 1.0f, 1.0f, ";", ":", ImGuiKey_Semicolon},
+	{11.75f, 0.0f, 1.0f, 1.0f, "'", "\"", ImGuiKey_Apostrophe},
+	{12.75f, 0.0f, 1.0f, 1.0f, "#", "~", ImGuiKey_Backslash},
+};
+
+static const KeyLayoutData apple_iso_row3_keys[] = {
+	{0.0f, 0.0f, 1.25f, 1.0f, "Shift", nullptr, ImGuiKey_LeftShift},
+	{1.25f, 0.0f, 1.0f, 1.0f, "`", "~", ImGuiKey_Oem102},
+	{2.25f, 0.0f, 1.0f, 1.0f, "Z", nullptr, ImGuiKey_Z},
+	{3.25f, 0.0f, 1.0f, 1.0f, "X", nullptr, ImGuiKey_X},
+	{4.25f, 0.0f, 1.0f, 1.0f, "C", nullptr, ImGuiKey_C},
+	{5.25f, 0.0f, 1.0f, 1.0f, "V", nullptr, ImGuiKey_V},
+	{6.25f, 0.0f, 1.0f, 1.0f, "B", nullptr, ImGuiKey_B},
+	{7.25f, 0.0f, 1.0f, 1.0f, "N", nullptr, ImGuiKey_N},
+	{8.25f, 0.0f, 1.0f, 1.0f, "M", nullptr, ImGuiKey_M},
+	{9.25f, 0.0f, 1.0f, 1.0f, ",", "<", ImGuiKey_Comma},
+	{10.25f, 0.0f, 1.0f, 1.0f, ".", ">", ImGuiKey_Period},
+	{11.25f, 0.0f, 1.0f, 1.0f, "/", "?", ImGuiKey_Slash},
 	{12.25f, 0.0f, 2.75f, 1.0f, "Shift", nullptr, ImGuiKey_RightShift},
 };
 
@@ -642,6 +756,7 @@ static void RenderKey(ImDrawList *draw_list, const ImVec2 &key_min, const ImVec2
 	const bool isTabKey = (key == ImGuiKey_Tab);
 	const bool isCapsLockKey = (key == ImGuiKey_CapsLock);
 	const bool isEnterKey = (key == ImGuiKey_Enter || key == ImGuiKey_KeypadEnter);
+	const bool isAppleModifier = (label && (strcmp(label, "Ctrl") == 0 || strcmp(label, "Opt") == 0 || strcmp(label, "Cmd") == 0));
 	// Numpad navigation keys (when NumLock is off, these act as navigation keys)
 	const bool numLockActive = ImGui::IsKeyDown(ImGuiKey_NumLock);
 	const bool isNumpadArrowKey = !numLockActive && (key == ImGuiKey_Keypad8 || key == ImGuiKey_Keypad2 ||
@@ -650,7 +765,7 @@ static void RenderKey(ImDrawList *draw_list, const ImVec2 &key_min, const ImVec2
 		!numLockActive && (key == ImGuiKey_Keypad7 || key == ImGuiKey_Keypad9 || key == ImGuiKey_Keypad1 ||
 						   key == ImGuiKey_Keypad3 || key == ImGuiKey_Keypad0 || key == ImGuiKey_KeypadDecimal);
 
-	if (showIcons && isWindowsKey) {
+	if (showIcons && isWindowsKey && !isAppleModifier) {
 		// Draw Windows logo (4 squares in a 2x2 grid)
 		const float logo_size = ImGui::GetFontSize() * 0.9f;
 		const float quad_size = logo_size * 0.45f;
@@ -758,6 +873,62 @@ static void RenderKey(ImDrawList *draw_list, const ImVec2 &key_min, const ImVec2
 			ImVec2 nav_pos = ImVec2(face_max.x - text_size.x - 2.0f, face_max.y - text_size.y - 2.0f);
 			draw_list->AddText(nav_pos, GetColorU32(ImGuiKeyboardCol_KeyLabel), navLabel);
 		}
+	} else if (showIcons && isAppleModifier) {
+		// Draw Apple modifier icons: Control, Option, Command
+		const float icon_size = ImGui::GetFontSize() * 0.8f;
+		ImU32 icon_color = GetColorU32(ImGuiKeyboardCol_KeyLabel);
+		ImVec2 center = ImVec2(label_min.x + icon_size * 0.5f, label_min.y + icon_size * 0.5f);
+		const float half = icon_size * 0.5f;
+		const float thickness = icon_size * 0.12f;
+
+		if (strcmp(label, "Ctrl") == 0) {
+			// Control symbol - caret/chevron pointing up
+			draw_list->AddTriangle(
+				ImVec2(center.x, center.y - half * 0.6f),
+				ImVec2(center.x - half * 0.7f, center.y + half * 0.3f),
+				ImVec2(center.x + half * 0.7f, center.y + half * 0.3f),
+				icon_color, thickness * 1.5f);
+		} else if (strcmp(label, "Opt") == 0) {
+			// Option symbol - split horizontal line with diagonal
+			// Top right horizontal segment
+			draw_list->AddLine(
+				ImVec2(center.x + half * 0.1f, center.y - half * 0.4f),
+				ImVec2(center.x + half * 0.8f, center.y - half * 0.4f),
+				icon_color, thickness * 1.5f);
+			// Diagonal from top right going down-left
+			draw_list->AddLine(
+				ImVec2(center.x + half * 0.1f, center.y - half * 0.4f),
+				ImVec2(center.x - half * 0.4f, center.y + half * 0.3f),
+				icon_color, thickness * 1.5f);
+			// Bottom left horizontal segment from diagonal end
+			draw_list->AddLine(
+				ImVec2(center.x - half * 0.8f, center.y + half * 0.3f),
+				ImVec2(center.x - half * 0.4f, center.y + half * 0.3f),
+				icon_color, thickness * 1.5f);
+			// Top left short horizontal line
+			draw_list->AddLine(
+				ImVec2(center.x - half * 0.8f, center.y - half * 0.4f),
+				ImVec2(center.x - half * 0.1f, center.y - half * 0.4f),
+				icon_color, thickness * 1.5f);
+		} else if (strcmp(label, "Cmd") == 0) {
+			// Command symbol - four loops
+			const float loopSize = half * 0.35f;
+			const float loopOffset = half * 0.4f;
+			// Four corner loops
+			draw_list->AddCircle(ImVec2(center.x - loopOffset, center.y - loopOffset), loopSize, icon_color, 12, thickness * 1.5f);
+			draw_list->AddCircle(ImVec2(center.x + loopOffset, center.y - loopOffset), loopSize, icon_color, 12, thickness * 1.5f);
+			draw_list->AddCircle(ImVec2(center.x - loopOffset, center.y + loopOffset), loopSize, icon_color, 12, thickness * 1.5f);
+			draw_list->AddCircle(ImVec2(center.x + loopOffset, center.y + loopOffset), loopSize, icon_color, 12, thickness * 1.5f);
+			// Cross connecting the loops
+			draw_list->AddLine(ImVec2(center.x - loopOffset, center.y - loopOffset - loopSize),
+							   ImVec2(center.x - loopOffset, center.y + loopOffset + loopSize), icon_color, thickness * 1.5f);
+			draw_list->AddLine(ImVec2(center.x + loopOffset, center.y - loopOffset - loopSize),
+							   ImVec2(center.x + loopOffset, center.y + loopOffset + loopSize), icon_color, thickness * 1.5f);
+			draw_list->AddLine(ImVec2(center.x - loopOffset - loopSize, center.y - loopOffset),
+							   ImVec2(center.x + loopOffset + loopSize, center.y - loopOffset), icon_color, thickness * 1.5f);
+			draw_list->AddLine(ImVec2(center.x - loopOffset - loopSize, center.y + loopOffset),
+							   ImVec2(center.x + loopOffset + loopSize, center.y + loopOffset), icon_color, thickness * 1.5f);
+		}
 	} else if (showIcons && isShiftKey) {
 		// Draw Shift icon
 		const float icon_size = ImGui::GetFontSize() * 0.8f;
@@ -841,9 +1012,9 @@ static void RenderKey(ImDrawList *draw_list, const ImVec2 &key_min, const ImVec2
 	}
 
 	// Highlight if pressed (red) or explicitly highlighted (green) or recorded (blue)
-	const bool isPressed = (flags & ImGuiKeyboardFlags_ShowPressed) && ImGui::IsKeyDown(key);
-	const bool isHighlighted = IsKeyHighlighted(key);
-	const bool isRecorded = (flags & ImGuiKeyboardFlags_Recordable) && IsKeyRecorded(key);
+	const bool isPressed = (flags & ImGuiKeyboardFlags_ShowPressed) && key != ImGuiKey_None && ImGui::IsKeyDown(key);
+	const bool isHighlighted = key != ImGuiKey_None && IsKeyHighlighted(key);
+	const bool isRecorded = (flags & ImGuiKeyboardFlags_Recordable) && key != ImGuiKey_None && IsKeyRecorded(key);
 	if (isPressed && isHighlighted) {
 		draw_list->AddRectFilled(key_min, key_max, GetColorU32(ImGuiKeyboardCol_KeyPressedHighlighted), key_rounding);
 	} else if (isPressed) {
@@ -853,6 +1024,165 @@ static void RenderKey(ImDrawList *draw_list, const ImVec2 &key_min, const ImVec2
 	} else if (isRecorded) {
 		draw_list->AddRectFilled(key_min, key_max, GetColorU32(ImGuiKeyboardCol_KeyRecorded), key_rounding);
 	}
+}
+
+// Render ISO L-shaped Enter key as a polygon
+// The ISO Enter key spans row1 and row2 with an L shape:
+//   +--------+
+//   |  Enter |  <- row1: wider top part
+//   +--+     |
+//      |     |  <- row2: narrower bottom part (right-aligned with top)
+//      +-----+
+static void RenderISOEnterKey(ImDrawList *draw_list, const ImVec2 &row1_pos, const ImVec2 &row2_pos,
+							  float key_unit, float scale, ImGuiKeyboardFlags flags) {
+	const ImGuiKeyboardStyle &style = GetStyle();
+	const float key_rounding = style.KeyRounding * scale;
+	const float border_size = style.KeyBorderSize * scale;
+
+	// ISO Enter key position: right edge aligns at 15 units (standard keyboard width)
+	// Top part (row1): starts at 13.5 (after ] key), width 1.5, ends at 15.0
+	// Bottom part (row2): starts at 13.75 (after # key), width 1.25, ends at 15.0
+	const float right_edge = 15.0f;
+	const float top_start = 13.5f;
+	const float bottom_start = 13.75f;
+
+	// Key outer bounds (with border offset)
+	float key_top = row1_pos.y + border_size;
+	float key_row1_bottom = row1_pos.y + key_unit - border_size;
+	float key_bottom = row2_pos.y + key_unit - border_size;
+	float key_left_top = row1_pos.x + top_start * key_unit + border_size;       // Left edge of top part
+	float key_left_bottom = row2_pos.x + bottom_start * key_unit + border_size; // Left edge of bottom part (step)
+	float key_right = row1_pos.x + right_edge * key_unit - border_size;         // Right edge (aligned)
+
+	// Draw the L-shape as two overlapping filled rectangles
+	ImU32 bg_color = GetColorU32(ImGuiKeyboardCol_KeyBackground);
+	ImU32 border_color = GetColorU32(ImGuiKeyboardCol_KeyBorder);
+
+	// Draw main vertical rectangle (right side, full height)
+	draw_list->AddRectFilled(ImVec2(key_left_bottom, key_top), ImVec2(key_right, key_bottom), bg_color, key_rounding);
+	// Draw top-left extension (the wider top part)
+	draw_list->AddRectFilled(ImVec2(key_left_top, key_top), ImVec2(key_left_bottom, key_row1_bottom), bg_color, key_rounding);
+
+	// Draw the L-shape border using line segments (clockwise from top-left)
+	// 1. Top edge (full width of top part)
+	draw_list->AddLine(ImVec2(key_left_top, key_top), ImVec2(key_right, key_top), border_color);
+	// 2. Right edge (full height)
+	draw_list->AddLine(ImVec2(key_right, key_top), ImVec2(key_right, key_bottom), border_color);
+	// 3. Bottom edge (width of bottom part)
+	draw_list->AddLine(ImVec2(key_right, key_bottom), ImVec2(key_left_bottom, key_bottom), border_color);
+	// 4. Left edge of bottom part (going up to step)
+	draw_list->AddLine(ImVec2(key_left_bottom, key_bottom), ImVec2(key_left_bottom, key_row1_bottom), border_color);
+	// 5. Step edge (horizontal, going left)
+	draw_list->AddLine(ImVec2(key_left_bottom, key_row1_bottom), ImVec2(key_left_top, key_row1_bottom), border_color);
+	// 6. Left edge of top part (going up to close)
+	draw_list->AddLine(ImVec2(key_left_top, key_row1_bottom), ImVec2(key_left_top, key_top), border_color);
+
+	// Key face (inner raised area)
+	const ImVec2 face_offset(style.KeyFaceOffset.x * scale, style.KeyFaceOffset.y * scale);
+	ImU32 face_color = GetColorU32(ImGuiKeyboardCol_KeyFace);
+
+	float face_top = key_top + face_offset.y;
+	float face_row1_bottom = key_row1_bottom - face_offset.y;
+	float face_bottom = key_bottom - face_offset.y;
+	float face_left_top = key_left_top + face_offset.x;
+	float face_left_bottom = key_left_bottom + face_offset.x;
+	float face_right = key_right - face_offset.x;
+
+	// Draw face as two rectangles
+	draw_list->AddRectFilled(ImVec2(face_left_bottom, face_top), ImVec2(face_right, face_bottom), face_color);
+	draw_list->AddRectFilled(ImVec2(face_left_top, face_top), ImVec2(face_left_bottom, face_row1_bottom), face_color);
+
+	// Label "Enter" - position in top part of the L-shape
+	float top_center_x = (key_left_top + key_right) * 0.5f;
+	float top_center_y = (key_top + key_row1_bottom) * 0.5f;
+	const char *label = "Enter";
+	ImVec2 text_size = ImGui::CalcTextSize(label);
+	ImVec2 label_pos(top_center_x - text_size.x * 0.5f, top_center_y - text_size.y * 0.5f);
+	draw_list->AddText(label_pos, GetColorU32(ImGuiKeyboardCol_KeyLabel), label);
+
+	// Draw Enter arrow icon (↵) in the bottom part of the L-shape
+	ImU32 icon_color = GetColorU32(ImGuiKeyboardCol_KeyLabel);
+	float bottom_center_x = (key_left_bottom + key_right) * 0.5f;
+	float bottom_center_y = (key_row1_bottom + key_bottom) * 0.5f;
+	float icon_size = ImGui::GetFontSize() * 0.6f;
+
+	// Draw the bent arrow: vertical line going up, then horizontal line going left with arrowhead
+	// Arrow shape: |
+	//              +--<
+	float arrow_top = bottom_center_y - icon_size * 0.4f;
+	float arrow_bottom = bottom_center_y + icon_size * 0.3f;
+	float arrow_right = bottom_center_x + icon_size * 0.4f;
+	float arrow_left = bottom_center_x - icon_size * 0.4f;
+	float arrow_bend_y = arrow_bottom;
+
+	// Vertical line (going down from top)
+	draw_list->AddLine(ImVec2(arrow_right, arrow_top), ImVec2(arrow_right, arrow_bend_y), icon_color, 1.5f * scale);
+	// Horizontal line (going left)
+	draw_list->AddLine(ImVec2(arrow_right, arrow_bend_y), ImVec2(arrow_left, arrow_bend_y), icon_color, 1.5f * scale);
+	// Arrowhead pointing left
+	float arrow_head_size = icon_size * 0.25f;
+	draw_list->AddTriangleFilled(
+		ImVec2(arrow_left, arrow_bend_y),
+		ImVec2(arrow_left + arrow_head_size, arrow_bend_y - arrow_head_size),
+		ImVec2(arrow_left + arrow_head_size, arrow_bend_y + arrow_head_size),
+		icon_color);
+
+	// Highlight overlay if pressed/highlighted/recorded
+	const bool isPressed = (flags & ImGuiKeyboardFlags_ShowPressed) && ImGui::IsKeyDown(ImGuiKey_Enter);
+	const bool isHighlighted = IsKeyHighlighted(ImGuiKey_Enter);
+	const bool isRecorded = (flags & ImGuiKeyboardFlags_Recordable) && IsKeyRecorded(ImGuiKey_Enter);
+
+	ImU32 highlight_color = 0;
+	if (isPressed && isHighlighted) {
+		highlight_color = GetColorU32(ImGuiKeyboardCol_KeyPressedHighlighted);
+	} else if (isPressed) {
+		highlight_color = GetColorU32(ImGuiKeyboardCol_KeyPressed);
+	} else if (isHighlighted) {
+		highlight_color = GetColorU32(ImGuiKeyboardCol_KeyHighlighted);
+	} else if (isRecorded) {
+		highlight_color = GetColorU32(ImGuiKeyboardCol_KeyRecorded);
+	}
+
+	if (highlight_color != 0) {
+		draw_list->AddRectFilled(ImVec2(key_left_bottom, key_top), ImVec2(key_right, key_bottom), highlight_color, key_rounding);
+		draw_list->AddRectFilled(ImVec2(key_left_top, key_top), ImVec2(key_left_bottom, key_row1_bottom), highlight_color, key_rounding);
+	}
+}
+
+// Check if mouse is inside the ISO Enter key L-shape
+static bool IsMouseInISOEnterKey(const ImVec2 &mouse_pos, const ImVec2 &row1_pos, const ImVec2 &row2_pos, float key_unit) {
+	// ISO Enter key position: right edge aligns at 15 units
+	// Top part: starts at 13.5 (after ] key), width 1.5
+	// Bottom part: starts at 13.75 (after # key), width 1.25
+	const float right_edge = 15.0f;
+	const float top_start = 13.5f;
+	const float bottom_start = 13.75f;
+
+	// Top rectangle bounds
+	float top_left = row1_pos.x + top_start * key_unit;
+	float top_right = row1_pos.x + right_edge * key_unit;
+	float top_top = row1_pos.y;
+	float row1_bottom = row1_pos.y + key_unit;
+
+	// Bottom rectangle bounds
+	float bottom_left = row2_pos.x + bottom_start * key_unit;
+	float bottom_right = row2_pos.x + right_edge * key_unit;
+	float bottom_top = row2_pos.y;
+	float bottom_bottom = row2_pos.y + key_unit;
+
+	// Check if in top part (row1)
+	if (mouse_pos.x >= top_left && mouse_pos.x <= top_right &&
+		mouse_pos.y >= top_top && mouse_pos.y <= row1_bottom) {
+		return true;
+	}
+
+	// Check if in bottom part (row2)
+	if (mouse_pos.x >= bottom_left && mouse_pos.x <= bottom_right &&
+		mouse_pos.y >= bottom_top && mouse_pos.y <= bottom_bottom) {
+		return true;
+	}
+
+	return false;
 }
 
 static void RenderKeyRow(ImDrawList *draw_list, const KeyLayoutData *keys, int key_count, const ImVec2 &start_pos,
@@ -1037,10 +1367,14 @@ void Keyboard(ImGuiKeyboardLayout layout, ImGuiKeyboardFlags flags) {
 		ImVec2 func_row_pos = start_pos;
 		RenderKeyRow(draw_list, function_row_keys, IM_ARRAYSIZE(function_row_keys), func_row_pos, key_unit, scale,
 					 flags);
-		// Print, Scroll, Pause - aligned with nav cluster
+		// Print/Scroll/Pause (or F13/F14/F15 for Apple) - aligned with nav cluster
 		ImVec2 func_row_nav_pos = ImVec2(nav_x, start_pos.y);
-		RenderKeyRow(draw_list, function_row_nav_keys, IM_ARRAYSIZE(function_row_nav_keys), func_row_nav_pos, key_unit,
-					 scale, flags);
+		const bool useAppleFunctionNav = (layout == ImGuiKeyboardLayout_AppleANSI || layout == ImGuiKeyboardLayout_AppleISO);
+		if (useAppleFunctionNav) {
+			RenderKeyRow(draw_list, apple_function_row_nav_keys, IM_ARRAYSIZE(apple_function_row_nav_keys), func_row_nav_pos, key_unit, scale, flags);
+		} else {
+			RenderKeyRow(draw_list, function_row_nav_keys, IM_ARRAYSIZE(function_row_nav_keys), func_row_nav_pos, key_unit, scale, flags);
+		}
 
 		// Main keyboard section (offset by function row + gap)
 		float main_section_y = start_pos.y + key_unit + 0.5f * key_unit;
@@ -1130,6 +1464,22 @@ void Keyboard(ImGuiKeyboardLayout layout, ImGuiKeyboardFlags flags) {
 			row3_keys = azerty_iso_row3_keys;
 			row3_count = IM_ARRAYSIZE(azerty_iso_row3_keys);
 			break;
+		case ImGuiKeyboardLayout_AppleANSI:
+			row1_keys = apple_ansi_row1_keys;
+			row1_count = IM_ARRAYSIZE(apple_ansi_row1_keys);
+			row2_keys = apple_ansi_row2_keys;
+			row2_count = IM_ARRAYSIZE(apple_ansi_row2_keys);
+			row3_keys = apple_ansi_row3_keys;
+			row3_count = IM_ARRAYSIZE(apple_ansi_row3_keys);
+			break;
+		case ImGuiKeyboardLayout_AppleISO:
+			row1_keys = apple_iso_row1_keys;
+			row1_count = IM_ARRAYSIZE(apple_iso_row1_keys);
+			row2_keys = apple_iso_row2_keys;
+			row2_count = IM_ARRAYSIZE(apple_iso_row2_keys);
+			row3_keys = apple_iso_row3_keys;
+			row3_count = IM_ARRAYSIZE(apple_iso_row3_keys);
+			break;
 		default: // QWERTY
 			row1_keys = qwerty_row1_keys;
 			row1_count = IM_ARRAYSIZE(qwerty_row1_keys);
@@ -1146,12 +1496,27 @@ void Keyboard(ImGuiKeyboardLayout layout, ImGuiKeyboardFlags flags) {
 		ImVec2 row2_pos = ImVec2(start_pos.x, main_section_y + 2.0f * key_unit);
 		RenderKeyRow(draw_list, row2_keys, row2_count, row2_pos, key_unit, scale, flags);
 
+		// Render ISO L-shaped Enter key for ISO layouts
+		const bool isISOLayout = (layout == ImGuiKeyboardLayout_QwertyISO ||
+								  layout == ImGuiKeyboardLayout_QwertzISO ||
+								  layout == ImGuiKeyboardLayout_AzertyISO ||
+								  layout == ImGuiKeyboardLayout_AppleISO);
+		if (isISOLayout) {
+			RenderISOEnterKey(draw_list, row1_pos, row2_pos, key_unit, scale, flags);
+		}
+
 		ImVec2 row3_pos = ImVec2(start_pos.x, main_section_y + 3.0f * key_unit);
 		RenderKeyRow(draw_list, row3_keys, row3_count, row3_pos, key_unit, scale, flags);
 
-		// Bottom row (modifiers + spacebar)
+		// Bottom row (modifiers + spacebar) - use Apple bottom row for Apple layouts
 		ImVec2 bottom_row_pos = ImVec2(start_pos.x, main_section_y + 4.0f * key_unit);
-		RenderKeyRow(draw_list, bottom_row_keys, IM_ARRAYSIZE(bottom_row_keys), bottom_row_pos, key_unit, scale, flags);
+		const bool isAppleLayout = (layout == ImGuiKeyboardLayout_AppleANSI ||
+									layout == ImGuiKeyboardLayout_AppleISO);
+		if (isAppleLayout) {
+			RenderKeyRow(draw_list, apple_bottom_row_keys, IM_ARRAYSIZE(apple_bottom_row_keys), bottom_row_pos, key_unit, scale, flags);
+		} else {
+			RenderKeyRow(draw_list, bottom_row_keys, IM_ARRAYSIZE(bottom_row_keys), bottom_row_pos, key_unit, scale, flags);
+		}
 
 		// Navigation cluster (Insert/Delete/Home/End/PgUp/PgDn + arrows)
 		ImVec2 nav_pos = ImVec2(nav_x, main_section_y);
@@ -1174,9 +1539,17 @@ void Keyboard(ImGuiKeyboardLayout layout, ImGuiKeyboardFlags flags) {
 			// Letter rows
 			HandleKeyRowRecording(row1_keys, row1_count, row1_pos, key_unit, scale, mouse_pos, mouse_clicked);
 			HandleKeyRowRecording(row2_keys, row2_count, row2_pos, key_unit, scale, mouse_pos, mouse_clicked);
+			// ISO Enter key (if ISO layout)
+			if (isISOLayout && IsMouseInISOEnterKey(mouse_pos, row1_pos, row2_pos, key_unit)) {
+				Record(ImGuiKey_Enter, !IsKeyRecorded(ImGuiKey_Enter));
+			}
 			HandleKeyRowRecording(row3_keys, row3_count, row3_pos, key_unit, scale, mouse_pos, mouse_clicked);
 			// Bottom row
-			HandleKeyRowRecording(bottom_row_keys, IM_ARRAYSIZE(bottom_row_keys), bottom_row_pos, key_unit, scale, mouse_pos, mouse_clicked);
+			if (isAppleLayout) {
+				HandleKeyRowRecording(apple_bottom_row_keys, IM_ARRAYSIZE(apple_bottom_row_keys), bottom_row_pos, key_unit, scale, mouse_pos, mouse_clicked);
+			} else {
+				HandleKeyRowRecording(bottom_row_keys, IM_ARRAYSIZE(bottom_row_keys), bottom_row_pos, key_unit, scale, mouse_pos, mouse_clicked);
+			}
 			// Navigation cluster
 			HandleKeyRowRecording(nav_cluster_keys, IM_ARRAYSIZE(nav_cluster_keys), nav_pos, key_unit, scale, mouse_pos, mouse_clicked);
 			// Numpad (if visible)
@@ -1211,7 +1584,7 @@ void KeyboardDemo() {
 	// Layout selection
 	ImGui::Text("Layout:");
 	ImGui::SameLine();
-	const char *layoutNames[] = {"QWERTY (ANSI)", "QWERTZ (ANSI)", "AZERTY (ANSI)", "Colemak", "Dvorak", "Numeric Pad", "QWERTY (ISO)", "QWERTZ (ISO)", "AZERTY (ISO)"};
+	const char *layoutNames[] = {"QWERTY (ANSI)", "QWERTZ (ANSI)", "AZERTY (ANSI)", "Colemak", "Dvorak", "Numeric Pad", "QWERTY (ISO)", "QWERTZ (ISO)", "AZERTY (ISO)", "Apple (ANSI)", "Apple (ISO)"};
 	if (ImGui::BeginCombo("##Layout", layoutNames[currentLayout])) {
 		for (int i = 0; i < ImGuiKeyboardLayout_Count; i++) {
 			const bool isSelected = (currentLayout == i);
