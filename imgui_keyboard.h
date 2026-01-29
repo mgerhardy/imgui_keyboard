@@ -48,6 +48,7 @@ enum ImGuiKeyboardFlags_ {
 	ImGuiKeyboardFlags_NoShiftLabels = 1 << 1,	// Don't show shift labels when Shift is pressed
 	ImGuiKeyboardFlags_ShowBothLabels = 1 << 2, // Always show both normal and shift labels (shift label below)
 	ImGuiKeyboardFlags_ShowIcons = 1 << 3,		// Show icons instead of text (Windows logo, arrow triangles)
+	ImGuiKeyboardFlags_NoNumpad = 1 << 4,		// Skip rendering the numeric keypad
 };
 typedef int ImGuiKeyboardFlags;
 

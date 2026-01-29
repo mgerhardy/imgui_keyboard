@@ -470,6 +470,13 @@ static void RenderKey(ImDrawList *draw_list, const ImVec2 &key_min, const ImVec2
 	const bool isTabKey = (key == ImGuiKey_Tab);
 	const bool isCapsLockKey = (key == ImGuiKey_CapsLock);
 	const bool isEnterKey = (key == ImGuiKey_Enter || key == ImGuiKey_KeypadEnter);
+	// Numpad navigation keys (when NumLock is off, these act as navigation keys)
+	const bool numLockActive = ImGui::IsKeyDown(ImGuiKey_NumLock);
+	const bool isNumpadArrowKey = !numLockActive && (key == ImGuiKey_Keypad8 || key == ImGuiKey_Keypad2 ||
+													 key == ImGuiKey_Keypad4 || key == ImGuiKey_Keypad6);
+	const bool isNumpadNavKey =
+		!numLockActive && (key == ImGuiKey_Keypad7 || key == ImGuiKey_Keypad9 || key == ImGuiKey_Keypad1 ||
+						   key == ImGuiKey_Keypad3 || key == ImGuiKey_Keypad0 || key == ImGuiKey_KeypadDecimal);
 
 	if (showIcons && isWindowsKey) {
 		// Draw Windows logo (4 squares in a 2x2 grid)
@@ -521,6 +528,63 @@ static void RenderKey(ImDrawList *draw_list, const ImVec2 &key_min, const ImVec2
 										 ImVec2(center.x - arrow_size * 0.5f, center.y - arrow_size * 0.5f),
 										 ImVec2(center.x - arrow_size * 0.5f, center.y + arrow_size * 0.5f),
 										 arrow_color);
+		}
+	} else if (showIcons && isNumpadArrowKey) {
+		// Draw number label first, then small arrow icon in corner (when NumLock is off)
+		draw_list->AddText(label_min, GetColorU32(ImGuiKeyboardCol_KeyLabel), label);
+
+		// Draw small arrow in bottom-right corner
+		const float arrow_size = ImGui::GetFontSize() * 0.35f;
+		ImU32 arrow_color = GetColorU32(ImGuiKeyboardCol_KeyLabel);
+		ImVec2 center = ImVec2(face_max.x - arrow_size * 0.8f, face_max.y - arrow_size * 0.8f);
+
+		if (key == ImGuiKey_Keypad8) {
+			// Triangle pointing up
+			draw_list->AddTriangleFilled(ImVec2(center.x, center.y - arrow_size * 0.5f),
+										 ImVec2(center.x - arrow_size * 0.5f, center.y + arrow_size * 0.5f),
+										 ImVec2(center.x + arrow_size * 0.5f, center.y + arrow_size * 0.5f),
+										 arrow_color);
+		} else if (key == ImGuiKey_Keypad2) {
+			// Triangle pointing down
+			draw_list->AddTriangleFilled(ImVec2(center.x, center.y + arrow_size * 0.5f),
+										 ImVec2(center.x - arrow_size * 0.5f, center.y - arrow_size * 0.5f),
+										 ImVec2(center.x + arrow_size * 0.5f, center.y - arrow_size * 0.5f),
+										 arrow_color);
+		} else if (key == ImGuiKey_Keypad4) {
+			// Triangle pointing left
+			draw_list->AddTriangleFilled(ImVec2(center.x - arrow_size * 0.5f, center.y),
+										 ImVec2(center.x + arrow_size * 0.5f, center.y - arrow_size * 0.5f),
+										 ImVec2(center.x + arrow_size * 0.5f, center.y + arrow_size * 0.5f),
+										 arrow_color);
+		} else if (key == ImGuiKey_Keypad6) {
+			// Triangle pointing right
+			draw_list->AddTriangleFilled(ImVec2(center.x + arrow_size * 0.5f, center.y),
+										 ImVec2(center.x - arrow_size * 0.5f, center.y - arrow_size * 0.5f),
+										 ImVec2(center.x - arrow_size * 0.5f, center.y + arrow_size * 0.5f),
+										 arrow_color);
+		}
+	} else if (showIcons && isNumpadNavKey) {
+		// Draw number label first, then small nav label in corner (when NumLock is off)
+		draw_list->AddText(label_min, GetColorU32(ImGuiKeyboardCol_KeyLabel), label);
+
+		// Draw small nav label in bottom-right corner
+		const char *navLabel = nullptr;
+		if (key == ImGuiKey_Keypad7)
+			navLabel = "Hm";
+		else if (key == ImGuiKey_Keypad9)
+			navLabel = "PU";
+		else if (key == ImGuiKey_Keypad1)
+			navLabel = "En";
+		else if (key == ImGuiKey_Keypad3)
+			navLabel = "PD";
+		else if (key == ImGuiKey_Keypad0)
+			navLabel = "In";
+		else if (key == ImGuiKey_KeypadDecimal)
+			navLabel = "De";
+		if (navLabel) {
+			ImVec2 text_size = ImGui::CalcTextSize(navLabel);
+			ImVec2 nav_pos = ImVec2(face_max.x - text_size.x - 2.0f, face_max.y - text_size.y - 2.0f);
+			draw_list->AddText(nav_pos, GetColorU32(ImGuiKeyboardCol_KeyLabel), navLabel);
 		}
 	} else if (showIcons && isShiftKey) {
 		// Draw Shift icon
@@ -654,6 +718,9 @@ void ClearHighlights() {
 }
 
 void Keyboard(ImGuiKeyboardLayout layout, ImGuiKeyboardFlags flags) {
+	IM_ASSERT(!(layout == ImGuiKeyboardLayout_NumericPad && (flags & ImGuiKeyboardFlags_NoNumpad)) &&
+			  "Cannot use NoNumpad flag with NumericPad layout");
+
 	KeyboardContext *ctx = GetContext();
 	const ImGuiKeyboardStyle &style = ctx->Style;
 	ImDrawList *draw_list = ImGui::GetWindowDrawList();
@@ -672,8 +739,8 @@ void Keyboard(ImGuiKeyboardLayout layout, ImGuiKeyboardFlags flags) {
 		board_height = 5.0f * key_unit + board_padding * 2.0f;
 	} else {
 		// Full keyboard: main section (15 keys) + nav cluster (3 keys) + numpad (4 keys) + gaps
-		board_width =
-			15.0f * key_unit + section_gap + 3.0f * key_unit + section_gap + 4.0f * key_unit + board_padding * 2.0f;
+		float numpad_width = (flags & ImGuiKeyboardFlags_NoNumpad) ? 0.0f : (section_gap + 4.0f * key_unit);
+		board_width = 15.0f * key_unit + section_gap + 3.0f * key_unit + numpad_width + board_padding * 2.0f;
 		board_height = 6.5f * key_unit + board_padding * 2.0f; // Function row + gap + 5 main rows
 	}
 
@@ -800,9 +867,11 @@ void Keyboard(ImGuiKeyboardLayout layout, ImGuiKeyboardFlags flags) {
 		RenderKeyRow(draw_list, nav_cluster_keys, IM_ARRAYSIZE(nav_cluster_keys), nav_pos, key_unit, scale, flags);
 
 		// Numeric keypad
-		float numpad_x = nav_x + 3.0f * key_unit + section_gap;
-		ImVec2 numpad_pos = ImVec2(numpad_x, main_section_y);
-		RenderKeyRow(draw_list, numpad_keys, IM_ARRAYSIZE(numpad_keys), numpad_pos, key_unit, scale, flags);
+		if (!(flags & ImGuiKeyboardFlags_NoNumpad)) {
+			float numpad_x = nav_x + 3.0f * key_unit + section_gap;
+			ImVec2 numpad_pos = ImVec2(numpad_x, main_section_y);
+			RenderKeyRow(draw_list, numpad_keys, IM_ARRAYSIZE(numpad_keys), numpad_pos, key_unit, scale, flags);
+		}
 	}
 
 	draw_list->PopClipRect();
@@ -814,6 +883,7 @@ void KeyboardDemo() {
 	static bool noShiftLabels = false;
 	static bool showBothLabels = false;
 	static bool showIcons = false;
+	static bool noNumpad = false;
 	static int currentLayout = ImGuiKeyboardLayout_Qwerty;
 	static bool highlightWASD = false;
 	static bool highlightArrows = false;
@@ -854,6 +924,9 @@ void KeyboardDemo() {
 		}
 	}
 	ImGui::Checkbox("Show Icons", &showIcons);
+	if (currentLayout != ImGuiKeyboardLayout_NumericPad) {
+		ImGui::Checkbox("Hide Numpad", &noNumpad);
+	}
 
 	ImGui::Separator();
 	ImGui::Text("Highlight Groups (Green):");
@@ -1002,6 +1075,9 @@ void KeyboardDemo() {
 	}
 	if (showIcons) {
 		flags |= ImGuiKeyboardFlags_ShowIcons;
+	}
+	if (noNumpad && currentLayout != ImGuiKeyboardLayout_NumericPad) {
+		flags |= ImGuiKeyboardFlags_NoNumpad;
 	}
 	Keyboard((ImGuiKeyboardLayout)currentLayout, flags);
 }
