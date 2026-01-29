@@ -492,10 +492,10 @@ static void RenderKey(ImDrawList *draw_list, const ImVec2 &key_min, const ImVec2
 								 ImVec2(logo_min.x + quad_size * 2.0f + gap, logo_min.y + quad_size * 2.0f + gap),
 								 logo_color);
 	} else if (showIcons && isArrowKey) {
-		// Draw arrow triangles
+		// Draw arrow triangles centered on the key face
 		const float arrow_size = ImGui::GetFontSize() * 0.7f;
 		ImU32 arrow_color = GetColorU32(ImGuiKeyboardCol_KeyLabel);
-		ImVec2 center = ImVec2(label_min.x + arrow_size * 0.5f, label_min.y + arrow_size * 0.5f);
+		ImVec2 center = ImVec2((face_min.x + face_max.x) * 0.5f, (face_min.y + face_max.y) * 0.5f);
 
 		if (key == ImGuiKey_UpArrow) {
 			// Triangle pointing up
