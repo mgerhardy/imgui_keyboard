@@ -1,4 +1,5 @@
 #include "imgui_keyboard.h"
+#include "imgui_internal.h"
 
 namespace ImKeyboard {
 
@@ -25,6 +26,7 @@ ImGuiKeyboardStyle::ImGuiKeyboardStyle() {
 	Colors[ImGuiKeyboardCol_KeyPressed] = ImVec4(1.0f, 0.0f, 0.0f, 0.5f);			 // Red
 	Colors[ImGuiKeyboardCol_KeyHighlighted] = ImVec4(0.0f, 1.0f, 0.0f, 0.5f);		 // Green
 	Colors[ImGuiKeyboardCol_KeyPressedHighlighted] = ImVec4(1.0f, 1.0f, 0.0f, 0.5f); // Yellow
+	Colors[ImGuiKeyboardCol_KeyRecorded] = ImVec4(0.0f, 0.5f, 1.0f, 0.5f);			 // Blue (for keybinding selection)
 }
 
 struct KeyLayoutData {
@@ -37,6 +39,7 @@ struct KeyLayoutData {
 
 struct KeyboardContext {
 	ImVector<ImGuiKey> HighlightedKeys;
+	ImVector<ImGuiKey> RecordedKeys;
 	ImGuiKeyboardStyle Style;
 
 	KeyboardContext() {
@@ -60,6 +63,16 @@ static bool IsKeyHighlighted(ImGuiKey key) {
 	KeyboardContext *ctx = GetContext();
 	for (int i = 0; i < ctx->HighlightedKeys.Size; i++) {
 		if (ctx->HighlightedKeys[i] == key) {
+			return true;
+		}
+	}
+	return false;
+}
+
+static bool IsKeyRecorded(ImGuiKey key) {
+	KeyboardContext *ctx = GetContext();
+	for (int i = 0; i < ctx->RecordedKeys.Size; i++) {
+		if (ctx->RecordedKeys[i] == key) {
 			return true;
 		}
 	}
@@ -668,15 +681,18 @@ static void RenderKey(ImDrawList *draw_list, const ImVec2 &key_min, const ImVec2
 		draw_list->AddText(label_min, GetColorU32(ImGuiKeyboardCol_KeyLabel), displayLabel);
 	}
 
-	// Highlight if pressed (red) or explicitly highlighted (green)
+	// Highlight if pressed (red) or explicitly highlighted (green) or recorded (blue)
 	const bool isPressed = (flags & ImGuiKeyboardFlags_ShowPressed) && ImGui::IsKeyDown(key);
 	const bool isHighlighted = IsKeyHighlighted(key);
+	const bool isRecorded = (flags & ImGuiKeyboardFlags_Recordable) && IsKeyRecorded(key);
 	if (isPressed && isHighlighted) {
 		draw_list->AddRectFilled(key_min, key_max, GetColorU32(ImGuiKeyboardCol_KeyPressedHighlighted), key_rounding);
 	} else if (isPressed) {
 		draw_list->AddRectFilled(key_min, key_max, GetColorU32(ImGuiKeyboardCol_KeyPressed), key_rounding);
 	} else if (isHighlighted) {
 		draw_list->AddRectFilled(key_min, key_max, GetColorU32(ImGuiKeyboardCol_KeyHighlighted), key_rounding);
+	} else if (isRecorded) {
+		draw_list->AddRectFilled(key_min, key_max, GetColorU32(ImGuiKeyboardCol_KeyRecorded), key_rounding);
 	}
 }
 
@@ -691,6 +707,51 @@ static void RenderKeyRow(ImDrawList *draw_list, const KeyLayoutData *keys, int k
 		ImVec2 key_size =
 			ImVec2(key->Width * key_unit - 2.0f * border_size, key->Height * key_unit - 2.0f * border_size);
 		RenderKey(draw_list, key_min, key_size, key->Label, key->ShiftLabel, key->Key, scale, flags);
+	}
+}
+
+static void Record(ImGuiKey key, bool record) {
+	KeyboardContext *ctx = GetContext();
+	if (record) {
+		// Add key if not already present
+		if (!IsKeyRecorded(key)) {
+			ctx->RecordedKeys.push_back(key);
+		}
+	} else {
+		// Remove key if present
+		for (int i = 0; i < ctx->RecordedKeys.Size; i++) {
+			if (ctx->RecordedKeys[i] == key) {
+				ctx->RecordedKeys.erase(&ctx->RecordedKeys[i]);
+				break;
+			}
+		}
+	}
+}
+
+// Handle recording for a row of keys - called when Recordable flag is set
+static void HandleKeyRowRecording(const KeyLayoutData *keys, int key_count, const ImVec2 &start_pos,
+								   float key_unit, float scale, const ImVec2 &mouse_pos, bool mouse_clicked) {
+	const ImGuiKeyboardStyle &style = GetStyle();
+	const float border_size = style.KeyBorderSize * scale;
+	for (int i = 0; i < key_count; i++) {
+		const KeyLayoutData *key = &keys[i];
+		ImVec2 key_min =
+			ImVec2(start_pos.x + key->X * key_unit + border_size, start_pos.y + key->Y * key_unit + border_size);
+		ImVec2 key_size =
+			ImVec2(key->Width * key_unit - 2.0f * border_size, key->Height * key_unit - 2.0f * border_size);
+		ImVec2 key_max = ImVec2(key_min.x + key_size.x, key_min.y + key_size.y);
+
+		// Check if mouse is inside this key and was clicked
+		if (mouse_clicked &&
+			mouse_pos.x >= key_min.x && mouse_pos.x < key_max.x &&
+			mouse_pos.y >= key_min.y && mouse_pos.y < key_max.y) {
+			// Toggle the recorded state
+			if (IsKeyRecorded(key->Key)) {
+				Record(key->Key, false);
+			} else {
+				Record(key->Key, true);
+			}
+		}
 	}
 }
 
@@ -715,6 +776,15 @@ void Highlight(ImGuiKey key, bool highlight) {
 void ClearHighlights() {
 	KeyboardContext *ctx = GetContext();
 	ctx->HighlightedKeys.clear();
+}
+
+void ClearRecorded() {
+	KeyboardContext *ctx = GetContext();
+	ctx->RecordedKeys.clear();
+}
+
+const ImVector<ImGuiKey>& GetRecordedKeys() {
+	return GetContext()->RecordedKeys;
 }
 
 void Keyboard(ImGuiKeyboardLayout layout, ImGuiKeyboardFlags flags) {
@@ -753,6 +823,38 @@ void Keyboard(ImGuiKeyboardLayout layout, ImGuiKeyboardFlags flags) {
 		return;
 	}
 
+	// Handle recording when Recordable flag is set
+	const bool recordable = (flags & ImGuiKeyboardFlags_Recordable) != 0;
+	bool mouse_clicked = false;
+	ImVec2 mouse_pos;
+	if (recordable) {
+		mouse_pos = ImGui::GetMousePos();
+		// Check if the mouse is within the board bounds and left button was clicked
+		if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) &&
+			mouse_pos.x >= board_min.x && mouse_pos.x < board_max.x &&
+			mouse_pos.y >= board_min.y && mouse_pos.y < board_max.y) {
+			mouse_clicked = true;
+		}
+
+		// Also detect actual keyboard key presses and toggle their recorded state
+		// Skip mouse buttons - they shouldn't be recorded when clicking on virtual keys
+		for (int k = ImGuiKey_NamedKey_BEGIN; k < ImGuiKey_NamedKey_END; k++) {
+			ImGuiKey key = (ImGuiKey)k;
+			// Skip mouse buttons and mouse wheel
+			if (!ImGui::IsKeyboardKey(key)) {
+				continue;
+			}
+			if (ImGui::IsKeyPressed(key, false)) {
+				// Toggle the recorded state
+				if (IsKeyRecorded(key)) {
+					Record(key, false);
+				} else {
+					Record(key, true);
+				}
+			}
+		}
+	}
+
 	// Draw board background
 	const float board_rounding = style.BoardRounding * scale;
 	draw_list->AddRectFilled(board_min, board_max, GetColorU32(ImGuiKeyboardCol_BoardBackground), board_rounding);
@@ -762,6 +864,10 @@ void Keyboard(ImGuiKeyboardLayout layout, ImGuiKeyboardFlags flags) {
 	if (layout == ImGuiKeyboardLayout_NumericPad) {
 		// Render only numpad
 		RenderKeyRow(draw_list, numpad_keys, IM_ARRAYSIZE(numpad_keys), start_pos, key_unit, scale, flags);
+		// Handle recording for numpad
+		if (mouse_clicked) {
+			HandleKeyRowRecording(numpad_keys, IM_ARRAYSIZE(numpad_keys), start_pos, key_unit, scale, mouse_pos, mouse_clicked);
+		}
 	} else {
 		// Full keyboard rendering
 
@@ -872,6 +978,29 @@ void Keyboard(ImGuiKeyboardLayout layout, ImGuiKeyboardFlags flags) {
 			ImVec2 numpad_pos = ImVec2(numpad_x, main_section_y);
 			RenderKeyRow(draw_list, numpad_keys, IM_ARRAYSIZE(numpad_keys), numpad_pos, key_unit, scale, flags);
 		}
+
+		// Handle recording for all key rows when Recordable flag is set
+		if (mouse_clicked) {
+			// Function row
+			HandleKeyRowRecording(function_row_keys, IM_ARRAYSIZE(function_row_keys), func_row_pos, key_unit, scale, mouse_pos, mouse_clicked);
+			HandleKeyRowRecording(function_row_nav_keys, IM_ARRAYSIZE(function_row_nav_keys), func_row_nav_pos, key_unit, scale, mouse_pos, mouse_clicked);
+			// Number row
+			HandleKeyRowRecording(num_row_keys, num_row_count, num_row_pos, key_unit, scale, mouse_pos, mouse_clicked);
+			// Letter rows
+			HandleKeyRowRecording(row1_keys, row1_count, row1_pos, key_unit, scale, mouse_pos, mouse_clicked);
+			HandleKeyRowRecording(row2_keys, row2_count, row2_pos, key_unit, scale, mouse_pos, mouse_clicked);
+			HandleKeyRowRecording(row3_keys, row3_count, row3_pos, key_unit, scale, mouse_pos, mouse_clicked);
+			// Bottom row
+			HandleKeyRowRecording(bottom_row_keys, IM_ARRAYSIZE(bottom_row_keys), bottom_row_pos, key_unit, scale, mouse_pos, mouse_clicked);
+			// Navigation cluster
+			HandleKeyRowRecording(nav_cluster_keys, IM_ARRAYSIZE(nav_cluster_keys), nav_pos, key_unit, scale, mouse_pos, mouse_clicked);
+			// Numpad (if visible)
+			if (!(flags & ImGuiKeyboardFlags_NoNumpad)) {
+				float numpad_x_recording = nav_x + 3.0f * key_unit + section_gap;
+				ImVec2 numpad_pos_recording = ImVec2(numpad_x_recording, main_section_y);
+				HandleKeyRowRecording(numpad_keys, IM_ARRAYSIZE(numpad_keys), numpad_pos_recording, key_unit, scale, mouse_pos, mouse_clicked);
+			}
+		}
 	}
 
 	draw_list->PopClipRect();
@@ -884,6 +1013,7 @@ void KeyboardDemo() {
 	static bool showBothLabels = false;
 	static bool showIcons = false;
 	static bool noNumpad = false;
+	static bool recordable = false;
 	static int currentLayout = ImGuiKeyboardLayout_Qwerty;
 	static bool highlightWASD = false;
 	static bool highlightArrows = false;
@@ -926,6 +1056,26 @@ void KeyboardDemo() {
 	ImGui::Checkbox("Show Icons", &showIcons);
 	if (currentLayout != ImGuiKeyboardLayout_NumericPad) {
 		ImGui::Checkbox("Hide Numpad", &noNumpad);
+	}
+	ImGui::Checkbox("Recordable Keys (Blue)", &recordable);
+
+	// Show recorded keys when recordable mode is enabled
+	if (recordable) {
+		const ImVector<ImGuiKey>& recordedKeys = GetRecordedKeys();
+		if (recordedKeys.Size > 0) {
+			ImGui::Text("Recorded Keys (%d):", recordedKeys.Size);
+			ImGui::SameLine();
+			for (int i = 0; i < recordedKeys.Size; i++) {
+				if (i > 0) ImGui::SameLine();
+				ImGui::Text("%s%s", ImGui::GetKeyName(recordedKeys[i]), i < recordedKeys.Size - 1 ? "," : "");
+			}
+			ImGui::SameLine();
+			if (ImGui::SmallButton("Clear")) {
+				ClearRecorded();
+			}
+		} else {
+			ImGui::Text("Click or press keys to record them");
+		}
 	}
 
 	ImGui::Separator();
@@ -1043,7 +1193,8 @@ void KeyboardDemo() {
 		if (ImGui::TreeNode("Colors")) {
 			const char *colorNames[] = {"Board Background", "Key Background",  "Key Border",
 										"Key Face Border",	"Key Face",		   "Key Label",
-										"Key Pressed",		"Key Highlighted", "Key Pressed+Highlighted"};
+										"Key Pressed",		"Key Highlighted", "Key Pressed+Highlighted",
+										"Key Recorded"};
 			for (int i = 0; i < ImGuiKeyboardCol_COUNT; i++) {
 				ImGui::ColorEdit4(colorNames[i], &style.Colors[i].x,
 								  ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreviewHalf);
@@ -1059,7 +1210,7 @@ void KeyboardDemo() {
 		}
 	}
 
-	ImGui::Text("Legend: (Default) Red = Pressed | Green = Highlighted | Yellow = Both");
+	ImGui::Text("Legend: (Default) Red = Pressed | Green = Highlighted | Yellow = Both | Blue = Recorded");
 	ImGui::Separator();
 
 	// Render the keyboard
@@ -1078,6 +1229,9 @@ void KeyboardDemo() {
 	}
 	if (noNumpad && currentLayout != ImGuiKeyboardLayout_NumericPad) {
 		flags |= ImGuiKeyboardFlags_NoNumpad;
+	}
+	if (recordable) {
+		flags |= ImGuiKeyboardFlags_Recordable;
 	}
 	Keyboard((ImGuiKeyboardLayout)currentLayout, flags);
 }

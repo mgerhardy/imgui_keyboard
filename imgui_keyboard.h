@@ -49,6 +49,7 @@ enum ImGuiKeyboardFlags_ {
 	ImGuiKeyboardFlags_ShowBothLabels = 1 << 2, // Always show both normal and shift labels (shift label below)
 	ImGuiKeyboardFlags_ShowIcons = 1 << 3,		// Show icons instead of text (Windows logo, arrow triangles)
 	ImGuiKeyboardFlags_NoNumpad = 1 << 4,		// Skip rendering the numeric keypad
+	ImGuiKeyboardFlags_Recordable = 1 << 5,		// Enable key recording for keybinding selection (click or press keys)
 };
 typedef int ImGuiKeyboardFlags;
 
@@ -63,6 +64,7 @@ enum ImGuiKeyboardCol_ {
 	ImGuiKeyboardCol_KeyPressed,			// Overlay color when key is pressed
 	ImGuiKeyboardCol_KeyHighlighted,		// Overlay color when key is highlighted
 	ImGuiKeyboardCol_KeyPressedHighlighted, // Overlay color when key is both pressed and highlighted
+	ImGuiKeyboardCol_KeyRecorded,			// Overlay color when key is recorded (for keybinding selection)
 
 	ImGuiKeyboardCol_COUNT
 };
@@ -91,6 +93,8 @@ struct ImGuiKeyboardStyle {
 ImGuiKeyboardStyle &GetStyle();
 void Highlight(ImGuiKey key, bool highlight);
 void ClearHighlights();
+void ClearRecorded();
+const ImVector<ImGuiKey>& GetRecordedKeys();
 void Keyboard(ImGuiKeyboardLayout layout, ImGuiKeyboardFlags flags = 0);
 void KeyboardDemo();
 
