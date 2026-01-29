@@ -20,12 +20,14 @@ ImGuiMouseStyle::ImGuiMouseStyle() {
 	Colors[ImGuiMouseCol_ButtonBorder] = ImVec4(0.2f, 0.2f, 0.2f, 1.0f);
 	Colors[ImGuiMouseCol_ButtonPressed] = ImVec4(1.0f, 0.0f, 0.0f, 0.5f);
 	Colors[ImGuiMouseCol_ButtonHighlighted] = ImVec4(0.0f, 1.0f, 0.0f, 0.5f);
+	Colors[ImGuiMouseCol_ButtonRecorded] = ImVec4(0.0f, 0.5f, 1.0f, 0.5f);
 	Colors[ImGuiMouseCol_WheelBackground] = ImVec4(0.2f, 0.2f, 0.2f, 1.0f);
 	Colors[ImGuiMouseCol_WheelForeground] = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
 }
 
 struct MouseContext {
 	ImVector<int> HighlightedButtons;
+	ImVector<int> RecordedButtons;
 	ImGuiMouseStyle Style;
 };
 
@@ -53,6 +55,32 @@ static bool IsButtonHighlighted(int button) {
 	return false;
 }
 
+static bool IsButtonRecorded(int button) {
+	MouseContext *ctx = GetContext();
+	for (int i = 0; i < ctx->RecordedButtons.Size; i++) {
+		if (ctx->RecordedButtons[i] == button) {
+			return true;
+		}
+	}
+	return false;
+}
+
+static void Record(int button, bool record) {
+	MouseContext *ctx = GetContext();
+	if (record) {
+		if (!IsButtonRecorded(button)) {
+			ctx->RecordedButtons.push_back(button);
+		}
+	} else {
+		for (int i = 0; i < ctx->RecordedButtons.Size; i++) {
+			if (ctx->RecordedButtons[i] == button) {
+				ctx->RecordedButtons.erase(&ctx->RecordedButtons[i]);
+				break;
+			}
+		}
+	}
+}
+
 void HighlightButton(int button, bool highlight) {
 	MouseContext *ctx = GetContext();
 	if (highlight) {
@@ -72,6 +100,15 @@ void HighlightButton(int button, bool highlight) {
 void ClearHighlights() {
 	MouseContext *ctx = GetContext();
 	ctx->HighlightedButtons.clear();
+}
+
+void ClearRecorded() {
+	MouseContext *ctx = GetContext();
+	ctx->RecordedButtons.clear();
+}
+
+const ImVector<int> &GetRecordedButtons() {
+	return GetContext()->RecordedButtons;
 }
 
 void Mouse(ImGuiMouseLayout layout, ImGuiMouseFlags flags) {
@@ -105,6 +142,16 @@ void Mouse(ImGuiMouseLayout layout, ImGuiMouseFlags flags) {
 	const bool threeButton = (layout == ImGuiMouseLayout_ThreeButton);
 	const bool showWheel = (flags & ImGuiMouseFlags_ShowWheel);
 	const bool showPressed = (flags & ImGuiMouseFlags_ShowPressed);
+	const bool recordable = (flags & ImGuiMouseFlags_Recordable);
+
+	// Handle recording when Recordable flag is set
+	ImVec2 mouse_pos;
+	bool mouse_in_canvas = false;
+	if (recordable) {
+		mouse_pos = ImGui::GetMousePos();
+		mouse_in_canvas = mouse_pos.x >= canvas_pos.x && mouse_pos.x < canvas_pos.x + canvas_size.x &&
+						  mouse_pos.y >= canvas_pos.y && mouse_pos.y < canvas_pos.y + canvas_size.y;
+	}
 
 	float left_button_width, right_button_width, middle_button_width = 0.0f;
 	if (threeButton || showWheel) {
@@ -126,14 +173,27 @@ void Mouse(ImGuiMouseLayout layout, ImGuiMouseFlags flags) {
 	draw_list->AddRect(left_btn_min, left_btn_max, GetColorU32(ImGuiMouseCol_ButtonBorder), body_rounding,
 					   ImDrawFlags_RoundCornersTopLeft);
 
-	// Left button pressed/highlighted overlay
+	// Left button pressed/highlighted/recorded overlay
 	bool leftPressed = showPressed && ImGui::IsMouseDown(ImGuiMouseButton_Left);
 	bool leftHighlighted = IsButtonHighlighted(ImGuiMouseButton_Left);
+	bool leftRecorded = recordable && IsButtonRecorded(ImGuiMouseButton_Left);
+
+	// Handle recording click on left button
+	if (recordable && mouse_in_canvas && ImGui::IsMouseClicked(ImGuiMouseButton_Left) &&
+		mouse_pos.x >= left_btn_min.x && mouse_pos.x < left_btn_max.x && mouse_pos.y >= left_btn_min.y &&
+		mouse_pos.y < left_btn_max.y) {
+		Record(ImGuiMouseButton_Left, !leftRecorded);
+		leftRecorded = !leftRecorded;
+	}
+
 	if (leftPressed) {
 		draw_list->AddRectFilled(left_btn_min, left_btn_max, GetColorU32(ImGuiMouseCol_ButtonPressed), body_rounding,
 								 ImDrawFlags_RoundCornersTopLeft);
 	} else if (leftHighlighted) {
-		draw_list->AddRectFilled(left_btn_min, left_btn_max, GetColorU32(ImGuiMouseCol_ButtonHighlighted), body_rounding,
+		draw_list->AddRectFilled(left_btn_min, left_btn_max, GetColorU32(ImGuiMouseCol_ButtonHighlighted),
+								 body_rounding, ImDrawFlags_RoundCornersTopLeft);
+	} else if (leftRecorded) {
+		draw_list->AddRectFilled(left_btn_min, left_btn_max, GetColorU32(ImGuiMouseCol_ButtonRecorded), body_rounding,
 								 ImDrawFlags_RoundCornersTopLeft);
 	}
 
@@ -146,15 +206,28 @@ void Mouse(ImGuiMouseLayout layout, ImGuiMouseFlags flags) {
 	draw_list->AddRect(right_btn_min, right_btn_max, GetColorU32(ImGuiMouseCol_ButtonBorder), body_rounding,
 					   ImDrawFlags_RoundCornersTopRight);
 
-	// Right button pressed/highlighted overlay
+	// Right button pressed/highlighted/recorded overlay
 	bool rightPressed = showPressed && ImGui::IsMouseDown(ImGuiMouseButton_Right);
 	bool rightHighlighted = IsButtonHighlighted(ImGuiMouseButton_Right);
+	bool rightRecorded = recordable && IsButtonRecorded(ImGuiMouseButton_Right);
+
+	// Handle recording click on right button
+	if (recordable && mouse_in_canvas && ImGui::IsMouseClicked(ImGuiMouseButton_Right) &&
+		mouse_pos.x >= right_btn_min.x && mouse_pos.x < right_btn_max.x && mouse_pos.y >= right_btn_min.y &&
+		mouse_pos.y < right_btn_max.y) {
+		Record(ImGuiMouseButton_Right, !rightRecorded);
+		rightRecorded = !rightRecorded;
+	}
+
 	if (rightPressed) {
 		draw_list->AddRectFilled(right_btn_min, right_btn_max, GetColorU32(ImGuiMouseCol_ButtonPressed), body_rounding,
 								 ImDrawFlags_RoundCornersTopRight);
 	} else if (rightHighlighted) {
 		draw_list->AddRectFilled(right_btn_min, right_btn_max, GetColorU32(ImGuiMouseCol_ButtonHighlighted),
 								 body_rounding, ImDrawFlags_RoundCornersTopRight);
+	} else if (rightRecorded) {
+		draw_list->AddRectFilled(right_btn_min, right_btn_max, GetColorU32(ImGuiMouseCol_ButtonRecorded), body_rounding,
+								 ImDrawFlags_RoundCornersTopRight);
 	}
 
 	// Middle button or wheel
@@ -177,14 +250,27 @@ void Mouse(ImGuiMouseLayout layout, ImGuiMouseFlags flags) {
 		}
 
 		if (threeButton) {
-			// Middle button pressed/highlighted overlay
+			// Middle button pressed/highlighted/recorded overlay
 			bool middlePressed = showPressed && ImGui::IsMouseDown(ImGuiMouseButton_Middle);
 			bool middleHighlighted = IsButtonHighlighted(ImGuiMouseButton_Middle);
+			bool middleRecorded = recordable && IsButtonRecorded(ImGuiMouseButton_Middle);
+
+			// Handle recording click on middle button
+			if (recordable && mouse_in_canvas && ImGui::IsMouseClicked(ImGuiMouseButton_Middle) &&
+				mouse_pos.x >= middle_min.x && mouse_pos.x < middle_max.x && mouse_pos.y >= middle_min.y &&
+				mouse_pos.y < middle_max.y) {
+				Record(ImGuiMouseButton_Middle, !middleRecorded);
+				middleRecorded = !middleRecorded;
+			}
+
 			if (middlePressed) {
 				draw_list->AddRectFilled(middle_min, middle_max, GetColorU32(ImGuiMouseCol_ButtonPressed),
 										 wheel_width * 0.3f);
 			} else if (middleHighlighted) {
 				draw_list->AddRectFilled(middle_min, middle_max, GetColorU32(ImGuiMouseCol_ButtonHighlighted),
+										 wheel_width * 0.3f);
+			} else if (middleRecorded) {
+				draw_list->AddRectFilled(middle_min, middle_max, GetColorU32(ImGuiMouseCol_ButtonRecorded),
 										 wheel_width * 0.3f);
 			}
 		}
@@ -197,6 +283,7 @@ void Mouse(ImGuiMouseLayout layout, ImGuiMouseFlags flags) {
 void MouseDemo() {
 	static bool showPressed = true;
 	static bool showWheel = true;
+	static bool recordable = false;
 	static int currentLayout = ImGuiMouseLayout_ThreeButton;
 
 	ImGui::Text("Mouse Widget Demo");
@@ -223,6 +310,30 @@ void MouseDemo() {
 	ImGui::Text("Options:");
 	ImGui::Checkbox("Show Pressed Buttons", &showPressed);
 	ImGui::Checkbox("Show Scroll Wheel", &showWheel);
+	ImGui::Checkbox("Recordable Buttons (Blue)", &recordable);
+
+	// Show recorded buttons when recordable mode is enabled
+	if (recordable) {
+		const ImVector<int> &recordedButtons = GetRecordedButtons();
+		if (recordedButtons.Size > 0) {
+			ImGui::Text("Recorded Buttons (%d):", recordedButtons.Size);
+			ImGui::SameLine();
+			const char *buttonNames[] = {"Left", "Right", "Middle"};
+			for (int i = 0; i < recordedButtons.Size; i++) {
+				if (i > 0)
+					ImGui::SameLine();
+				int btn = recordedButtons[i];
+				const char *name = (btn >= 0 && btn < 3) ? buttonNames[btn] : "?";
+				ImGui::Text("%s%s", name, i < recordedButtons.Size - 1 ? "," : "");
+			}
+			ImGui::SameLine();
+			if (ImGui::SmallButton("Clear##MouseClear")) {
+				ClearRecorded();
+			}
+		} else {
+			ImGui::Text("Click mouse buttons to record them");
+		}
+	}
 
 	ImGui::Separator();
 
@@ -233,6 +344,9 @@ void MouseDemo() {
 	}
 	if (showWheel) {
 		flags |= ImGuiMouseFlags_ShowWheel;
+	}
+	if (recordable) {
+		flags |= ImGuiMouseFlags_Recordable;
 	}
 	Mouse((ImGuiMouseLayout)currentLayout, flags);
 }

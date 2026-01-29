@@ -42,6 +42,7 @@ enum ImGuiMouseFlags_ {
 	ImGuiMouseFlags_None = 0,
 	ImGuiMouseFlags_ShowPressed = 1 << 0, // Highlight buttons that are currently pressed
 	ImGuiMouseFlags_ShowWheel = 1 << 1,	  // Show scroll wheel
+	ImGuiMouseFlags_Recordable = 1 << 2,  // Enable button recording for keybinding selection (click buttons)
 };
 typedef int ImGuiMouseFlags;
 
@@ -53,6 +54,7 @@ enum ImGuiMouseCol_ {
 	ImGuiMouseCol_ButtonBorder,		 // Button border color
 	ImGuiMouseCol_ButtonPressed,	 // Overlay color when button is pressed
 	ImGuiMouseCol_ButtonHighlighted, // Overlay color when button is highlighted
+	ImGuiMouseCol_ButtonRecorded,	 // Overlay color when button is recorded (for keybinding selection)
 	ImGuiMouseCol_WheelBackground,	 // Scroll wheel background
 	ImGuiMouseCol_WheelForeground,	 // Scroll wheel foreground/notches
 
@@ -78,6 +80,8 @@ struct ImGuiMouseStyle {
 ImGuiMouseStyle &GetStyle();
 void HighlightButton(int button, bool highlight);
 void ClearHighlights();
+void ClearRecorded();
+const ImVector<int> &GetRecordedButtons();
 void Mouse(ImGuiMouseLayout layout, ImGuiMouseFlags flags = 0);
 void MouseDemo();
 
