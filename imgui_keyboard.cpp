@@ -436,6 +436,165 @@ static const KeyLayoutData dvorak_row3_keys[] = {
 	{12.25f, 0.0f, 2.75f, 1.0f, "Shift", nullptr, ImGuiKey_RightShift},
 };
 
+// ISO layout rows - ISO keyboards have:
+// - L-shaped Enter key (spans row 1 and row 2)
+// - Shorter left Shift with extra key next to it
+// - No backslash key on row 1 (it's part of Enter or moved to row 3)
+
+// ISO QWERTY row 1 - no backslash, Enter extends here
+static const KeyLayoutData qwerty_iso_row1_keys[] = {
+	{0.0f, 0.0f, 1.5f, 1.0f, "Tab", nullptr, ImGuiKey_Tab},
+	{1.5f, 0.0f, 1.0f, 1.0f, "Q", nullptr, ImGuiKey_Q},
+	{2.5f, 0.0f, 1.0f, 1.0f, "W", nullptr, ImGuiKey_W},
+	{3.5f, 0.0f, 1.0f, 1.0f, "E", nullptr, ImGuiKey_E},
+	{4.5f, 0.0f, 1.0f, 1.0f, "R", nullptr, ImGuiKey_R},
+	{5.5f, 0.0f, 1.0f, 1.0f, "T", nullptr, ImGuiKey_T},
+	{6.5f, 0.0f, 1.0f, 1.0f, "Y", nullptr, ImGuiKey_Y},
+	{7.5f, 0.0f, 1.0f, 1.0f, "U", nullptr, ImGuiKey_U},
+	{8.5f, 0.0f, 1.0f, 1.0f, "I", nullptr, ImGuiKey_I},
+	{9.5f, 0.0f, 1.0f, 1.0f, "O", nullptr, ImGuiKey_O},
+	{10.5f, 0.0f, 1.0f, 1.0f, "P", nullptr, ImGuiKey_P},
+	{11.5f, 0.0f, 1.0f, 1.0f, "[", "{", ImGuiKey_LeftBracket},
+	{12.5f, 0.0f, 1.0f, 1.0f, "]", "}", ImGuiKey_RightBracket},
+	// Enter key top part (1.5 wide, extends down in row 2)
+	{13.5f, 0.0f, 1.5f, 2.0f, "Enter", nullptr, ImGuiKey_Enter},
+};
+
+// ISO QWERTY row 2 - Enter is part of the L-shape from row 1
+static const KeyLayoutData qwerty_iso_row2_keys[] = {
+	{0.0f, 0.0f, 1.75f, 1.0f, "Caps", nullptr, ImGuiKey_CapsLock},
+	{1.75f, 0.0f, 1.0f, 1.0f, "A", nullptr, ImGuiKey_A},
+	{2.75f, 0.0f, 1.0f, 1.0f, "S", nullptr, ImGuiKey_S},
+	{3.75f, 0.0f, 1.0f, 1.0f, "D", nullptr, ImGuiKey_D},
+	{4.75f, 0.0f, 1.0f, 1.0f, "F", nullptr, ImGuiKey_F},
+	{5.75f, 0.0f, 1.0f, 1.0f, "G", nullptr, ImGuiKey_G},
+	{6.75f, 0.0f, 1.0f, 1.0f, "H", nullptr, ImGuiKey_H},
+	{7.75f, 0.0f, 1.0f, 1.0f, "J", nullptr, ImGuiKey_J},
+	{8.75f, 0.0f, 1.0f, 1.0f, "K", nullptr, ImGuiKey_K},
+	{9.75f, 0.0f, 1.0f, 1.0f, "L", nullptr, ImGuiKey_L},
+	{10.75f, 0.0f, 1.0f, 1.0f, ";", ":", ImGuiKey_Semicolon},
+	{11.75f, 0.0f, 1.0f, 1.0f, "'", "\"", ImGuiKey_Apostrophe},
+	{12.75f, 0.0f, 1.0f, 1.0f, "#", "~", ImGuiKey_Backslash}, // ISO hash key
+	// Enter is rendered as part of row 1 (tall key)
+};
+
+// ISO QWERTY row 3 - shorter left Shift with extra key
+static const KeyLayoutData qwerty_iso_row3_keys[] = {
+	{0.0f, 0.0f, 1.25f, 1.0f, "Shift", nullptr, ImGuiKey_LeftShift},
+	{1.25f, 0.0f, 1.0f, 1.0f, "\\", "|", ImGuiKey_Oem102}, // ISO extra key
+	{2.25f, 0.0f, 1.0f, 1.0f, "Z", nullptr, ImGuiKey_Z},
+	{3.25f, 0.0f, 1.0f, 1.0f, "X", nullptr, ImGuiKey_X},
+	{4.25f, 0.0f, 1.0f, 1.0f, "C", nullptr, ImGuiKey_C},
+	{5.25f, 0.0f, 1.0f, 1.0f, "V", nullptr, ImGuiKey_V},
+	{6.25f, 0.0f, 1.0f, 1.0f, "B", nullptr, ImGuiKey_B},
+	{7.25f, 0.0f, 1.0f, 1.0f, "N", nullptr, ImGuiKey_N},
+	{8.25f, 0.0f, 1.0f, 1.0f, "M", nullptr, ImGuiKey_M},
+	{9.25f, 0.0f, 1.0f, 1.0f, ",", "<", ImGuiKey_Comma},
+	{10.25f, 0.0f, 1.0f, 1.0f, ".", ">", ImGuiKey_Period},
+	{11.25f, 0.0f, 1.0f, 1.0f, "/", "?", ImGuiKey_Slash},
+	{12.25f, 0.0f, 2.75f, 1.0f, "Shift", nullptr, ImGuiKey_RightShift},
+};
+
+// ISO QWERTZ (German) rows
+static const KeyLayoutData qwertz_iso_row1_keys[] = {
+	{0.0f, 0.0f, 1.5f, 1.0f, "Tab", nullptr, ImGuiKey_Tab},
+	{1.5f, 0.0f, 1.0f, 1.0f, "Q", nullptr, ImGuiKey_Q},
+	{2.5f, 0.0f, 1.0f, 1.0f, "W", nullptr, ImGuiKey_W},
+	{3.5f, 0.0f, 1.0f, 1.0f, "E", nullptr, ImGuiKey_E},
+	{4.5f, 0.0f, 1.0f, 1.0f, "R", nullptr, ImGuiKey_R},
+	{5.5f, 0.0f, 1.0f, 1.0f, "T", nullptr, ImGuiKey_T},
+	{6.5f, 0.0f, 1.0f, 1.0f, "Z", nullptr, ImGuiKey_Z},
+	{7.5f, 0.0f, 1.0f, 1.0f, "U", nullptr, ImGuiKey_U},
+	{8.5f, 0.0f, 1.0f, 1.0f, "I", nullptr, ImGuiKey_I},
+	{9.5f, 0.0f, 1.0f, 1.0f, "O", nullptr, ImGuiKey_O},
+	{10.5f, 0.0f, 1.0f, 1.0f, "P", nullptr, ImGuiKey_P},
+	{11.5f, 0.0f, 1.0f, 1.0f, "\xc3\x9c", nullptr, ImGuiKey_LeftBracket},
+	{12.5f, 0.0f, 1.0f, 1.0f, "+", "*", ImGuiKey_RightBracket},
+	{13.5f, 0.0f, 1.5f, 2.0f, "Enter", nullptr, ImGuiKey_Enter},
+};
+
+static const KeyLayoutData qwertz_iso_row2_keys[] = {
+	{0.0f, 0.0f, 1.75f, 1.0f, "Caps", nullptr, ImGuiKey_CapsLock},
+	{1.75f, 0.0f, 1.0f, 1.0f, "A", nullptr, ImGuiKey_A},
+	{2.75f, 0.0f, 1.0f, 1.0f, "S", nullptr, ImGuiKey_S},
+	{3.75f, 0.0f, 1.0f, 1.0f, "D", nullptr, ImGuiKey_D},
+	{4.75f, 0.0f, 1.0f, 1.0f, "F", nullptr, ImGuiKey_F},
+	{5.75f, 0.0f, 1.0f, 1.0f, "G", nullptr, ImGuiKey_G},
+	{6.75f, 0.0f, 1.0f, 1.0f, "H", nullptr, ImGuiKey_H},
+	{7.75f, 0.0f, 1.0f, 1.0f, "J", nullptr, ImGuiKey_J},
+	{8.75f, 0.0f, 1.0f, 1.0f, "K", nullptr, ImGuiKey_K},
+	{9.75f, 0.0f, 1.0f, 1.0f, "L", nullptr, ImGuiKey_L},
+	{10.75f, 0.0f, 1.0f, 1.0f, "\xc3\x96", nullptr, ImGuiKey_Semicolon},
+	{11.75f, 0.0f, 1.0f, 1.0f, "\xc3\x84", nullptr, ImGuiKey_Apostrophe},
+	{12.75f, 0.0f, 1.0f, 1.0f, "#", "'", ImGuiKey_Backslash},
+};
+
+static const KeyLayoutData qwertz_iso_row3_keys[] = {
+	{0.0f, 0.0f, 1.25f, 1.0f, "Shift", nullptr, ImGuiKey_LeftShift},
+	{1.25f, 0.0f, 1.0f, 1.0f, "<", ">", ImGuiKey_Oem102},
+	{2.25f, 0.0f, 1.0f, 1.0f, "Y", nullptr, ImGuiKey_Y},
+	{3.25f, 0.0f, 1.0f, 1.0f, "X", nullptr, ImGuiKey_X},
+	{4.25f, 0.0f, 1.0f, 1.0f, "C", nullptr, ImGuiKey_C},
+	{5.25f, 0.0f, 1.0f, 1.0f, "V", nullptr, ImGuiKey_V},
+	{6.25f, 0.0f, 1.0f, 1.0f, "B", nullptr, ImGuiKey_B},
+	{7.25f, 0.0f, 1.0f, 1.0f, "N", nullptr, ImGuiKey_N},
+	{8.25f, 0.0f, 1.0f, 1.0f, "M", nullptr, ImGuiKey_M},
+	{9.25f, 0.0f, 1.0f, 1.0f, ",", ";", ImGuiKey_Comma},
+	{10.25f, 0.0f, 1.0f, 1.0f, ".", ":", ImGuiKey_Period},
+	{11.25f, 0.0f, 1.0f, 1.0f, "-", "_", ImGuiKey_Slash},
+	{12.25f, 0.0f, 2.75f, 1.0f, "Shift", nullptr, ImGuiKey_RightShift},
+};
+
+// ISO AZERTY (French) rows
+static const KeyLayoutData azerty_iso_row1_keys[] = {
+	{0.0f, 0.0f, 1.5f, 1.0f, "Tab", nullptr, ImGuiKey_Tab},
+	{1.5f, 0.0f, 1.0f, 1.0f, "A", nullptr, ImGuiKey_A},
+	{2.5f, 0.0f, 1.0f, 1.0f, "Z", nullptr, ImGuiKey_Z},
+	{3.5f, 0.0f, 1.0f, 1.0f, "E", nullptr, ImGuiKey_E},
+	{4.5f, 0.0f, 1.0f, 1.0f, "R", nullptr, ImGuiKey_R},
+	{5.5f, 0.0f, 1.0f, 1.0f, "T", nullptr, ImGuiKey_T},
+	{6.5f, 0.0f, 1.0f, 1.0f, "Y", nullptr, ImGuiKey_Y},
+	{7.5f, 0.0f, 1.0f, 1.0f, "U", nullptr, ImGuiKey_U},
+	{8.5f, 0.0f, 1.0f, 1.0f, "I", nullptr, ImGuiKey_I},
+	{9.5f, 0.0f, 1.0f, 1.0f, "O", nullptr, ImGuiKey_O},
+	{10.5f, 0.0f, 1.0f, 1.0f, "P", nullptr, ImGuiKey_P},
+	{11.5f, 0.0f, 1.0f, 1.0f, "^", nullptr, ImGuiKey_LeftBracket},
+	{12.5f, 0.0f, 1.0f, 1.0f, "$", nullptr, ImGuiKey_RightBracket},
+	{13.5f, 0.0f, 1.5f, 2.0f, "Enter", nullptr, ImGuiKey_Enter},
+};
+
+static const KeyLayoutData azerty_iso_row2_keys[] = {
+	{0.0f, 0.0f, 1.75f, 1.0f, "Caps", nullptr, ImGuiKey_CapsLock},
+	{1.75f, 0.0f, 1.0f, 1.0f, "Q", nullptr, ImGuiKey_Q},
+	{2.75f, 0.0f, 1.0f, 1.0f, "S", nullptr, ImGuiKey_S},
+	{3.75f, 0.0f, 1.0f, 1.0f, "D", nullptr, ImGuiKey_D},
+	{4.75f, 0.0f, 1.0f, 1.0f, "F", nullptr, ImGuiKey_F},
+	{5.75f, 0.0f, 1.0f, 1.0f, "G", nullptr, ImGuiKey_G},
+	{6.75f, 0.0f, 1.0f, 1.0f, "H", nullptr, ImGuiKey_H},
+	{7.75f, 0.0f, 1.0f, 1.0f, "J", nullptr, ImGuiKey_J},
+	{8.75f, 0.0f, 1.0f, 1.0f, "K", nullptr, ImGuiKey_K},
+	{9.75f, 0.0f, 1.0f, 1.0f, "L", nullptr, ImGuiKey_L},
+	{10.75f, 0.0f, 1.0f, 1.0f, "M", nullptr, ImGuiKey_M},
+	{11.75f, 0.0f, 1.0f, 1.0f, "\xc3\xb9", "%", ImGuiKey_Apostrophe},
+	{12.75f, 0.0f, 1.0f, 1.0f, "*", nullptr, ImGuiKey_Backslash},
+};
+
+static const KeyLayoutData azerty_iso_row3_keys[] = {
+	{0.0f, 0.0f, 1.25f, 1.0f, "Shift", nullptr, ImGuiKey_LeftShift},
+	{1.25f, 0.0f, 1.0f, 1.0f, "<", ">", ImGuiKey_Oem102},
+	{2.25f, 0.0f, 1.0f, 1.0f, "W", nullptr, ImGuiKey_W},
+	{3.25f, 0.0f, 1.0f, 1.0f, "X", nullptr, ImGuiKey_X},
+	{4.25f, 0.0f, 1.0f, 1.0f, "C", nullptr, ImGuiKey_C},
+	{5.25f, 0.0f, 1.0f, 1.0f, "V", nullptr, ImGuiKey_V},
+	{6.25f, 0.0f, 1.0f, 1.0f, "B", nullptr, ImGuiKey_B},
+	{7.25f, 0.0f, 1.0f, 1.0f, "N", nullptr, ImGuiKey_N},
+	{8.25f, 0.0f, 1.0f, 1.0f, ",", "?", ImGuiKey_Comma},
+	{9.25f, 0.0f, 1.0f, 1.0f, ";", ".", ImGuiKey_Semicolon},
+	{10.25f, 0.0f, 1.0f, 1.0f, ":", "/", ImGuiKey_Period},
+	{11.25f, 0.0f, 1.0f, 1.0f, "!", nullptr, ImGuiKey_Slash},
+	{12.25f, 0.0f, 2.75f, 1.0f, "Shift", nullptr, ImGuiKey_RightShift},
+};
+
 // Bottom row (modifiers + spacebar)
 static const KeyLayoutData bottom_row_keys[] = {
 	{0.0f, 0.0f, 1.25f, 1.0f, "Ctrl", nullptr, ImGuiKey_LeftCtrl},
@@ -892,10 +1051,12 @@ void Keyboard(ImGuiKeyboardLayout layout, ImGuiKeyboardFlags flags) {
 		int num_row_count;
 		switch (layout) {
 		case ImGuiKeyboardLayout_Qwertz:
+		case ImGuiKeyboardLayout_QwertzISO:
 			num_row_keys = number_row_qwertz_keys;
 			num_row_count = IM_ARRAYSIZE(number_row_qwertz_keys);
 			break;
 		case ImGuiKeyboardLayout_Azerty:
+		case ImGuiKeyboardLayout_AzertyISO:
 			num_row_keys = number_row_azerty_keys;
 			num_row_count = IM_ARRAYSIZE(number_row_azerty_keys);
 			break;
@@ -944,6 +1105,30 @@ void Keyboard(ImGuiKeyboardLayout layout, ImGuiKeyboardFlags flags) {
 			row2_count = IM_ARRAYSIZE(dvorak_row2_keys);
 			row3_keys = dvorak_row3_keys;
 			row3_count = IM_ARRAYSIZE(dvorak_row3_keys);
+			break;
+		case ImGuiKeyboardLayout_QwertyISO:
+			row1_keys = qwerty_iso_row1_keys;
+			row1_count = IM_ARRAYSIZE(qwerty_iso_row1_keys);
+			row2_keys = qwerty_iso_row2_keys;
+			row2_count = IM_ARRAYSIZE(qwerty_iso_row2_keys);
+			row3_keys = qwerty_iso_row3_keys;
+			row3_count = IM_ARRAYSIZE(qwerty_iso_row3_keys);
+			break;
+		case ImGuiKeyboardLayout_QwertzISO:
+			row1_keys = qwertz_iso_row1_keys;
+			row1_count = IM_ARRAYSIZE(qwertz_iso_row1_keys);
+			row2_keys = qwertz_iso_row2_keys;
+			row2_count = IM_ARRAYSIZE(qwertz_iso_row2_keys);
+			row3_keys = qwertz_iso_row3_keys;
+			row3_count = IM_ARRAYSIZE(qwertz_iso_row3_keys);
+			break;
+		case ImGuiKeyboardLayout_AzertyISO:
+			row1_keys = azerty_iso_row1_keys;
+			row1_count = IM_ARRAYSIZE(azerty_iso_row1_keys);
+			row2_keys = azerty_iso_row2_keys;
+			row2_count = IM_ARRAYSIZE(azerty_iso_row2_keys);
+			row3_keys = azerty_iso_row3_keys;
+			row3_count = IM_ARRAYSIZE(azerty_iso_row3_keys);
 			break;
 		default: // QWERTY
 			row1_keys = qwerty_row1_keys;
@@ -1026,7 +1211,7 @@ void KeyboardDemo() {
 	// Layout selection
 	ImGui::Text("Layout:");
 	ImGui::SameLine();
-	const char *layoutNames[] = {"QWERTY", "QWERTZ", "AZERTY", "Colemak", "Dvorak", "Numeric Pad"};
+	const char *layoutNames[] = {"QWERTY (ANSI)", "QWERTZ (ANSI)", "AZERTY (ANSI)", "Colemak", "Dvorak", "Numeric Pad", "QWERTY (ISO)", "QWERTZ (ISO)", "AZERTY (ISO)"};
 	if (ImGui::BeginCombo("##Layout", layoutNames[currentLayout])) {
 		for (int i = 0; i < ImGuiKeyboardLayout_Count; i++) {
 			const bool isSelected = (currentLayout == i);

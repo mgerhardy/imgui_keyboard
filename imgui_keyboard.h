@@ -31,12 +31,15 @@
 namespace ImKeyboard {
 
 enum ImGuiKeyboardLayout_ {
-	ImGuiKeyboardLayout_Qwerty,
-	ImGuiKeyboardLayout_Qwertz,
-	ImGuiKeyboardLayout_Azerty,
-	ImGuiKeyboardLayout_Colemak,
-	ImGuiKeyboardLayout_Dvorak,
+	ImGuiKeyboardLayout_Qwerty,		 // ANSI
+	ImGuiKeyboardLayout_Qwertz,		 // ANSI
+	ImGuiKeyboardLayout_Azerty,		 // ANSI
+	ImGuiKeyboardLayout_Colemak,	 // ANSI
+	ImGuiKeyboardLayout_Dvorak,		 // ANSI
 	ImGuiKeyboardLayout_NumericPad,
+	ImGuiKeyboardLayout_QwertyISO,	 // ISO (UK/International)
+	ImGuiKeyboardLayout_QwertzISO,	 // ISO (German)
+	ImGuiKeyboardLayout_AzertyISO,	 // ISO (French)
 
 	ImGuiKeyboardLayout_Count
 };
@@ -94,7 +97,7 @@ ImGuiKeyboardStyle &GetStyle();
 void Highlight(ImGuiKey key, bool highlight);
 void ClearHighlights();
 void ClearRecorded();
-const ImVector<ImGuiKey>& GetRecordedKeys();
+const ImVector<ImGuiKey> &GetRecordedKeys();
 void Keyboard(ImGuiKeyboardLayout layout, ImGuiKeyboardFlags flags = 0);
 void KeyboardDemo();
 
