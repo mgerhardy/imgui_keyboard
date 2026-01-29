@@ -10,7 +10,9 @@ Input widgets for [Dear ImGui](https://github.com/ocornut/imgui).
 
 ![keyboard icons](imgui_keyboard1.png)
 
-![keyboard shift](imgui_keyboard2.png)
+![keyboard apple](imgui_keyboard2.png)
+
+![keyboard iso](imgui_keyboard3.png)
 
 ![mouse wheel](mouse_wheel.png)
 
