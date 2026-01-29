@@ -1,21 +1,22 @@
 # imgui_keyboard
 
-A virtual keyboard widget for [Dear ImGui](https://github.com/ocornut/imgui).
+Input widgets for [Dear ImGui](https://github.com/ocornut/imgui).
+
+* Keyboard
+* Mouse
+* Gamepad (wip)
+
+## Screenshots
 
 ![keyboard icons](imgui_keyboard1.png)
 
 ![keyboard shift](imgui_keyboard2.png)
 
-![mouse](imgui_mouse.png)
-
 ![mouse wheel](mouse_wheel.png)
-
-![Demo](demo.png)
 
 ## Features
 
 - Multiple keyboard layouts: QWERTY, QWERTZ, AZERTY, Colemak, Dvorak, Numeric Pad
-- Auto-detect layout based on system settings
 - Key highlighting and press visualization
 - Fully customizable styling (colors, sizes, rounding)
 
